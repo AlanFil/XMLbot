@@ -4,40 +4,32 @@ import os
 
 from FTP_connection.transfer import *
 from XML.create_XML import create_XML
-from collect_data import collect_data
-
-from globals import STARTING_DIRECTORY
-
-
-def create_product_folder(product_folder_name):
-    pr_folder_path = f'{STARTING_DIRECTORY}\\bin\\{product_folder_name}'
-    try:
-        os.mkdir(pr_folder_path)
-        os.mkdir(f'{pr_folder_path}\\product_imgs')
-        os.mkdir(f'{pr_folder_path}\\description_imgs')
-    except FileExistsError:
-        print(f'Folder "{product_folder_name}" already exists in bin.')
-        # return -1
-
-    return pr_folder_path
-
+from collect_data_from_sites import collect_data_from_sites
+from collect_data_oyo import collect_data_oyo
+from imgs_processing.download_imgs_and_replace_links import download_imgs_and_replace_links
 
 if __name__ == '__main__':
+    """ HARD CODE ALERT """
+    # products = [''].split(\t)
+    products = [['TEST', 'Samsung Próba generalna', '1234567891234', '9999', 'SAM_AKC', 'Matrix',
+                 'https://www.samsung.com/pl/lifestyle-tvs/the-sero/ls05t-43-inch-the-sero-4k-smart-tv-navy-blue-qe43ls05tauxxh/']]
+    """ HARD CODE ALERT """
+
+    # define an XML file to write products data inside
     root = xml.Element('Products')
     tree = None
-    adding_products = []
-    for i in range(2):  # quantitiy of products to add
-        # (1) gather all necessary data (description images, product images and for XML file)
-        full_product = collect_data(i)
+    for product in products:  # quantitiy of products to add
+        # (1) gather all necessary data on your own (oyo)
+        full_product = collect_data_oyo(product)
 
-        # (2) create folder with product data (for description images, product images and XML file)
-        product_folder_path = create_product_folder(full_product['product_folder_name_in'])
+        # (3) gather all necessary data from given page(s)
+        collect_data_from_sites(full_product)
 
-        # (3) create XML out of collected data
+        # (4) download imgs from description and replace links
+        download_imgs_and_replace_links(full_product['product_folder_name_in'], full_product['descriptions'][0])
 
-        tree = create_XML(root, full_product['product_folder_name_in'], full_product['product_in'],
-                          full_product['descriptions_in'], full_product['weight_in'], full_product['manufacturer_in'],
-                          full_product['pickup_store_in'], full_product['imgs_in'], full_product['ceneo_link_in'])
+        # (5) create XML out of collected data
+        tree = create_XML(root, full_product)
 
     if tree is not None:
         xml_file_name = f'Products_{strftime("%Y%m%d%H%M%S", gmtime())}.xml'
@@ -45,7 +37,9 @@ if __name__ == '__main__':
         with open(f'bin\\{xml_file_name}', 'wb') as file:
             tree.write(file)
 
-        folders = [folder for folder in os.listdir('bin') if not folder.endswith('.xml') and len(folder.split(' - ')) == 2]
+        folders = [folder for folder in os.listdir('bin') if
+                   not folder.endswith('.xml') and len(folder.split(' - ')) == 2]
+
         for folder in folders:
             f = folder.split(' - ')
             FTP = make_FTP_connection()
