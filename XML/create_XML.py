@@ -1,4 +1,9 @@
+"""
+adding element with attribute "base" equal to "True":
+    xml.SubElement(imgs_el, 'image', attrib={'base': 'True'}).text = img
+"""
 import xml.etree.ElementTree as xml
+import os
 
 
 def create_XML(root, full_product):
@@ -20,7 +25,7 @@ def create_XML(root, full_product):
     params.append(imgs_el)
     for i, img in enumerate(full_product['imgs']):
         if i == 0:
-            xml.SubElement(imgs_el, 'image', attrib={'base': 'True'}).text = img
+            xml.SubElement(imgs_el, 'image').text = img
         else:
             xml.SubElement(imgs_el, 'image').text = img
 

@@ -164,7 +164,9 @@ def collect_data_oyo(product):
 
         'link': product[6],
         # product folder will be changed by adding brand name on the left hand site
-        'product_folder_name_in': ' - ' + ''.join(filter(str.isalnum, product[0]))
+        'product_folder_name_in': ' - ' + ''.join(filter(str.isalnum, product[0])),
+
+        'attribute_set_id': '4'  # "Default" by default
     }
 
     return full_product

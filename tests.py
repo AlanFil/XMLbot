@@ -1,7 +1,3 @@
-import os
-
-STARTING_DIRECTORY = os.getcwd()
-
 
 def separate_by_tag(tag, txt):
     tag_s = f'<{tag}'
@@ -18,3 +14,8 @@ def separate_by_tag(tag, txt):
         txt = txt.replace(separated, '')
 
     return separated_elements
+
+
+if __name__ == '__main__':
+    text = '<div 1><div 2><div 3>penis</div></div></div>'
+    separate_by_tag('div', text)

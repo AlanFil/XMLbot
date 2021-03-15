@@ -1,19 +1,16 @@
 import requests
 from scrapy import Selector
-from keyboard import wait
 import re
-import pprint
-
 from imgs_processing.ImgRefractor import prod_img
-
-pp = pprint.PrettyPrinter()
+from tqdm import tqdm
 
 
 def description(sel):
+    print('Zbieranie danych z opisu')
     benefit = sel.xpath('//*[@id="benefit"]/*').extract()
     benefit = [ele.replace('\n', '').replace('\t', '') for ele in benefit if not ele.startswith('<input')]
 
-    for i in range(len(benefit)):
+    for i in tqdm(range(len(benefit))):
         size = 'big'
         if 'class="product-summary__list-item"' in benefit[i]:
             # should implement description element of 3 elems in row here
@@ -81,7 +78,7 @@ def description(sel):
         for ele in re.findall(r'<div class="feature-benefit__text">', benefit[i]):
             benefit[i] = benefit[i].replace(ele, '<div>')
 
-    return ''.join(benefit)
+    return '<div class="product-description-section">' + ''.join(benefit) + '</div>'
 
 
 def short_desc(sel):
@@ -116,14 +113,18 @@ def product_imgs(link, product_folder_name_in, ean):
     sel = Selector(text=requests.get(link).content)
     imgs_links = []
     for img in sel.xpath('//div[contains(@class, "pd-header-gallery")]//img/@data-desktop-src').extract():
-        new_link = img.replace('//', 'https://').replace('$LazyLoad_Home_PNG$', '').replace('$684_547_PNG$', '')
+        new_link = img.replace('//', 'https://').replace('$LazyLoad_Home', '').replace('$684_547', '')
         imgs_links.append(new_link)
 
     imgs_links = list(dict.fromkeys(imgs_links))  # remove duplicates
     imgs_names = []
     for i, img_link in enumerate(imgs_links):
-        file_type = prod_img(product_folder_name_in, img_link, f'{ean}-{i}', crop=False)
-        imgs_names.append(f'{ean}-{i}.{file_type}')
+        if i == 0:
+            file_type = prod_img(product_folder_name_in, img_link, f'{ean}-{i}-base', crop=False)
+            imgs_names.append(f'{ean}-{i}-base.{file_type}')
+        else:
+            file_type = prod_img(product_folder_name_in, img_link, f'{ean}-{i}', crop=False)
+            imgs_names.append(f'{ean}-{i}.{file_type}')
 
     return imgs_names
 
