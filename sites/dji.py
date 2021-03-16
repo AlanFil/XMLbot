@@ -5,10 +5,10 @@ def enum(y):
 
 """
 
-import requests
-from scrapy import Selector
 import re
 
+import requests
+from scrapy import Selector
 from tqdm import tqdm
 
 from globals import separate_by_tag

@@ -1,6 +1,5 @@
 import xml.etree.ElementTree as xml
 from time import gmtime, strftime
-import os
 
 from FTP_connection.transfer import *
 from XML.create_XML import create_XML

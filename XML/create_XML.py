@@ -3,7 +3,6 @@ adding element with attribute "base" equal to "True":
     xml.SubElement(imgs_el, 'image', attrib={'base': 'True'}).text = img
 """
 import xml.etree.ElementTree as xml
-import os
 
 
 def create_XML(root, full_product):

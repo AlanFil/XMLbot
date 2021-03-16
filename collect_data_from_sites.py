@@ -1,7 +1,8 @@
+import os
+
+from globals import STARTING_DIRECTORY
 from sites.dji import dji_manage
 from sites.samsung import samsung_manage
-from globals import STARTING_DIRECTORY
-import os
 
 
 def create_product_folder(product_folder_name):
