@@ -28,7 +28,7 @@ def add_mm_css(desc):
     return desc
 
 
-def preview_html(desc):
+def preview_html(desc, ean):
     while 'src="//' in desc:
         desc = desc.replace('src="//', 'src="https://')
 
@@ -37,11 +37,14 @@ def preview_html(desc):
         preview.write(add_mm_css(desc))
 
     # open "preview.html" file and wait for a user to confirm it
+    print('Zatwierdź klawiszem "Enter" lub odrzuć klawiszem "Esc"')
     os.startfile('preview.html')
     while True:
         if keyboard.is_pressed('Enter'):
             os.remove('preview.html')  # remove "preview.html" file
+            print(f'Zatwierdzono: {ean}')
             return 0
         elif keyboard.is_pressed('Esc'):
             os.remove('preview.html')  # remove "preview.html" file
+            print(f'Odrzucono: {ean}')
             return -1
