@@ -137,7 +137,7 @@ def collect_data_oyo(product):
     full_product = {
         'descriptions': ['<p></p>', '', ''],
         'name': product[1],
-        'sku': product[2],
+        'sku': product[2].replace(' ', ''),
         'weight': '1',
         'status': '2',  # Nieaktywny, const
         'manufacturer': '0',  # 0 by default. It may be overwritten later

@@ -8,6 +8,8 @@ from imgs_processing.ImgRefractor import desc_img
 def download_imgs_and_replace_links(product_folder_name, description):
     links = re.findall('src=".*?"', description)
     for i in tqdm(range(len(links))):
+        if '.gif' in links[i]:
+            continue
         links[i] = links[i].replace('src="', '').replace('"', '')
 
         img_type = desc_img(product_folder_name, links[i], i)
