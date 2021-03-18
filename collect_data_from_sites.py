@@ -1,8 +1,10 @@
 import os
 
 from globals import STARTING_DIRECTORY
-from sites.dji import dji_manage
+from sites.rcpro import dji_manage
+from sites.krysiak import krysiak_manage
 from sites.samsung import samsung_manage
+from sites.scentre import scentre_manage
 
 
 def create_product_folder(product_folder_name):
@@ -28,8 +30,13 @@ def collect_data_from_sites(full_product):
         dji_manage(full_product)
 
     elif 'krysiak' in full_product['link'].lower():
-            full_product['product_folder_name_in'] = 'DJI' + full_product['product_folder_name_in']
-            create_product_folder(full_product['product_folder_name_in'])
-            dji_manage(full_product)
+        full_product['product_folder_name_in'] = 'KRYSIAK' + full_product['product_folder_name_in']
+        create_product_folder(full_product['product_folder_name_in'])
+        krysiak_manage(full_product)
+
+    elif 'scentre' in full_product['link'].lower():
+        full_product['product_folder_name_in'] = 'Sony' + full_product['product_folder_name_in']
+        create_product_folder(full_product['product_folder_name_in'])
+        scentre_manage(full_product)
 
 

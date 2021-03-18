@@ -3,18 +3,25 @@ for i, ele in enumerate(desc):
     print(f'{i}. {ele}')
 
 use: separate_by_tag(tag, txt)
+eg.: separate_by_tag('span', desc[i])
 """
 
 
 import requests
 from scrapy import Selector
+from tqdm import tqdm
 import re
+from globals import separate_by_tag
 from imgs_processing.ImgRefractor import prod_img
 
 
 def description(sel):
-    desc = ''
-    return desc
+    desc = sel.xpath('')
+
+    for i in tqdm(range(len(desc))):
+        pass
+
+    return '<div class="product-description-section">' + ''.join(desc) + '</div>'
 
 
 def short_desc(sel):
@@ -31,8 +38,7 @@ def product_imgs(link, product_folder_name_in, ean):
     sel = Selector(text=requests.get(link).content)
     imgs_links = []
     for img in sel.xpath('').extract():
-        new_link = img.replace('//', 'https://').replace('$LazyLoad_Home', '').replace('$684_547', '')
-        imgs_links.append(new_link)
+        imgs_links.append(img)
 
     imgs_links = list(dict.fromkeys(imgs_links))  # remove duplicates
     imgs_names = []

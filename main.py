@@ -10,7 +10,7 @@ from imgs_processing.download_imgs_and_replace_links import download_imgs_and_re
 
 if __name__ == '__main__':
     """ HARD CODE ALERT """
-    products = """4GP_APK2521S	Podkaszarka akumulatorowa 4GARDEN APK2521 + akumulator i ładowarka 	5903357105303	9999	KRYSIAK	Matrix .xls""".split('\n')
+    products = """HAMMER3B	Telefon HAMMER 3 czarny	5902052868858	9999	MYPHONE	Matrix .xls	https://sklep.mptech.eu/HAMMER_3.html""".split('\n')
     """ HARD CODE ALERT """
 
     # define an XML file to write products data inside
