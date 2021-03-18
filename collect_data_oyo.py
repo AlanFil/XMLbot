@@ -78,7 +78,8 @@ def set_rule_ID(rule):
         'ZACO': '182',
         'ZENDURE': '174',
         '_OUTLET': '79',
-        '__INNE': '183'
+        '__INNE': '183',
+        'KRYSIAK': '189'
     }
 
     try:

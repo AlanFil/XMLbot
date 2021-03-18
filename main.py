@@ -10,12 +10,7 @@ from imgs_processing.download_imgs_and_replace_links import download_imgs_and_re
 
 if __name__ == '__main__':
     """ HARD CODE ALERT """
-    products = """QE65QN800ATXXH	TVC SAMSUNG QE65QN800ATXXH	8 806 092 024 922	9999	SAM_RTV	Matrix	https://www.samsung.com/pl/tvs/qled-tv/qn800a-65-inch-neo-qled-8k-smart-tv-qe65qn800atxxh/
-QE65QN85AATXXH	TVC SAMSUNG QE65QN85AATXXH	8 806 092 024 939	9999	SAM_RTV	Matrix	https://www.samsung.com/pl/tvs/qled-tv/qn85a-65-inch-neo-qled-4k-smart-tv-qe65qn85aatxxh/
-QE65QN91AATXXH	TVC SAMSUNG QE65QN91AATXXH	8 806 092 036 253	9999	SAM_RTV	Matrix	https://www.samsung.com/pl/tvs/qled-tv/qn90a-65-inch-neo-qled-4k-smart-tv-qe65qn91aatxxh/
-QE75QN800ATXXH	TVC SAMSUNG QE75QN800ATXXH	8 806 092 024 960	9999	SAM_RTV	Matrix	https://www.samsung.com/pl/tvs/qled-tv/qn800a-75-inch-neo-qled-8k-smart-tv-qe75qn800atxxh/
-QE75QN85AATXXH	TVC SAMSUNG QE75QN85AATXXH	8 806 092 024 984	9999	SAM_RTV	Matrix	https://www.samsung.com/pl/tvs/qled-tv/qn85a-75-inch-neo-qled-4k-smart-tv-qe75qn85aatxxh/
-QE75QN91AATXXH	TVC SAMSUNG QE75QN91AATXXH	8 806 092 036 307	9999	SAM_RTV	Matrix	https://www.samsung.com/pl/tvs/qled-tv/qn90a-75-inch-neo-qled-4k-smart-tv-qe75qn91aatxxh/""".split('\n')
+    products = """4GP_APK2521S	Podkaszarka akumulatorowa 4GARDEN APK2521 + akumulator i ładowarka 	5903357105303	9999	KRYSIAK	Matrix .xls""".split('\n')
     """ HARD CODE ALERT """
 
     # define an XML file to write products data inside
@@ -57,4 +52,5 @@ QE75QN91AATXXH	TVC SAMSUNG QE75QN91AATXXH	8 806 092 036 307	9999	SAM_RTV	Matrix	
             send_XML_via_FTP(FTP, xml_file_name)  # send XML via FTP
             close_FTP_connection(FTP)
 
-    print(f'Opuszczono: {[print(f"{i}. {ele}") for i, ele in enumerate(passed)]}') if passed else print('Wszystkie produkty zostały dodane')
+    print(f'Opuszczono: ')
+    [print(f"{i}. {ele}") for i, ele in enumerate(passed)] if passed else print('Wszystkie produkty zostały dodane')

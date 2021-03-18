@@ -1,6 +1,8 @@
 """
 for i, ele in enumerate(desc):
     print(f'{i}. {ele}')
+
+use: separate_by_tag(tag, txt)
 """
 
 
@@ -25,9 +27,24 @@ def tech_desc(sel):
     return tech
 
 
-def product_imgs(link, product_folder_name, ean):
-    imgs = ''
-    return imgs
+def product_imgs(link, product_folder_name_in, ean):
+    sel = Selector(text=requests.get(link).content)
+    imgs_links = []
+    for img in sel.xpath('').extract():
+        new_link = img.replace('//', 'https://').replace('$LazyLoad_Home', '').replace('$684_547', '')
+        imgs_links.append(new_link)
+
+    imgs_links = list(dict.fromkeys(imgs_links))  # remove duplicates
+    imgs_names = []
+    for i, img_link in enumerate(imgs_links):
+        if i == 0:
+            file_type = prod_img(product_folder_name_in, img_link, f'{ean}-{i}-base', crop=False)
+            imgs_names.append(f'{ean}-{i}-base.{file_type}')
+        else:
+            file_type = prod_img(product_folder_name_in, img_link, f'{ean}-{i}', crop=False)
+            imgs_names.append(f'{ean}-{i}.{file_type}')
+
+    return imgs_names
 
 
 def XXX_descriptions(link):
@@ -40,7 +57,7 @@ def XXX_descriptions(link):
     return [desc, short, tech]
 
 
-def dji_manage(full_product):
+def XXX_manage(full_product):
     full_product['manufacturer'] = ''
     full_product['pickup_store'] = '1,2,3...'
     full_product['descriptions'] = XXX_descriptions(full_product['link'])

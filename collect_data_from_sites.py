@@ -27,4 +27,9 @@ def collect_data_from_sites(full_product):
         create_product_folder(full_product['product_folder_name_in'])
         dji_manage(full_product)
 
+    elif 'krysiak' in full_product['link'].lower():
+            full_product['product_folder_name_in'] = 'DJI' + full_product['product_folder_name_in']
+            create_product_folder(full_product['product_folder_name_in'])
+            dji_manage(full_product)
+
 
