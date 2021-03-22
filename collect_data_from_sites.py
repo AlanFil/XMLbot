@@ -1,6 +1,7 @@
 import os
 
 from globals import STARTING_DIRECTORY
+from sites.mptech import mptech_manage
 from sites.rcpro import dji_manage
 from sites.krysiak import krysiak_manage
 from sites.samsung import samsung_manage
@@ -39,4 +40,7 @@ def collect_data_from_sites(full_product):
         create_product_folder(full_product['product_folder_name_in'])
         scentre_manage(full_product)
 
-
+    elif 'mptech' in full_product['link'].lower():
+        full_product['product_folder_name_in'] = 'myPhone' + full_product['product_folder_name_in']
+        create_product_folder(full_product['product_folder_name_in'])
+        mptech_manage(full_product)

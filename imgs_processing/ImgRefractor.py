@@ -7,18 +7,24 @@ Funkcja desc_img:
 """
 
 import requests
-from PIL import Image
+from PIL import Image, UnidentifiedImageError
 from requests.exceptions import InvalidURL
+from urllib3.exceptions import MaxRetryError
 
 
 def desc_img(product_folder_name, img_link, img_name, border=800, crop=False, force_small=False):
-    if img_link.startswith('//'):
-        img_link = img_link.replace('//', 'http://')
-
     try:
         res = requests.get(img_link)
-    except InvalidURL:
-        print(f'{img_link} - nie udało się pobrać zdjęcia z tego linku')
+    except:
+        try:
+            res = requests.get(img_link.replace('//', ''))
+        except:
+            try:
+                res = requests.get('https://' + img_link)
+            except:
+                print(f'{img_link} - nie udało się pobrać zdjęcia z tego linku')
+                return 0
+
 
     # zweryfikuj typ pliku
     if 'jpg' in img_link[-5:].lower():
@@ -34,7 +40,11 @@ def desc_img(product_folder_name, img_link, img_name, border=800, crop=False, fo
     # pobierz zdjęcie
     with open(IMAGE_PATH, 'wb') as file_format:
         file_format.write(res.content)
-    im = Image.open(IMAGE_PATH)
+
+    try:
+        im = Image.open(IMAGE_PATH)
+    except UnidentifiedImageError:
+        return 0
 
     # przytnij pustą przestrzeń
     if crop:
@@ -78,7 +88,11 @@ def prod_img(product_folder_name, img_link, img_name, crop=False):
     # pobierz zdjęcie
     with open(IMAGE_PATH, 'wb') as file_format:
         file_format.write(res.content)
-    im = Image.open(IMAGE_PATH)
+
+    try:
+        im = Image.open(IMAGE_PATH)
+    except UnidentifiedImageError:
+        return 0
 
     # przytnij pustą przestrzeń
     if crop:

@@ -10,7 +10,13 @@ from imgs_processing.download_imgs_and_replace_links import download_imgs_and_re
 
 if __name__ == '__main__':
     """ HARD CODE ALERT """
-    products = """HAMMER3B	Telefon HAMMER 3 czarny	5902052868858	9999	MYPHONE	Matrix .xls	https://sklep.mptech.eu/HAMMER_3.html""".split('\n')
+    products = """BAT_HEXPLORER	Bateria zewnętrzna do HAMMER Explorer	5902983609520	9999	MYPHONE	Matrix .xls	https://sklep.mptech.eu/akc000800.html
+HBLADE3	Smartfon HAMMER Blade 3	5902983609490	9999	MYPHONE	Matrix .xls	https://sklep.mptech.eu/tel000560.html
+HPROFBS21	Smartfon HAMMER Professional BS21 	5902983609254	9999	MYPHONE	Matrix .xls	https://sklep.mptech.eu/tel000539.html
+HWATCH	Smartwatch HAMMER Watch	5902983610205	9999	MYPHONE	Matrix .xls	https://sklep.mptech.eu/tab000474.html
+MYPHONEFUN6	Smartfon myPhone Fun 6 czarny	5902983608899	9999	MYPHONE	Matrix .xls	https://sklep.mptech.eu/sma002411.html
+MYPHONENOW	Smartfon myPhone Now eSIM	5902983612193	9999	MYPHONE	Matrix .xls	https://sklep.mptech.eu/sma002503.html
+MYPHONEHERED	Telefon myPhone Halo Easy czerwony 	5902052866625	9999	MYPHONE	Matrix	https://sklep.mptech.eu/Halo_Easy.html""".split('\n')
     """ HARD CODE ALERT """
 
     # define an XML file to write products data inside
