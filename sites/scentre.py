@@ -9,8 +9,6 @@ eg.: separate_by_tag('span', desc[i])
 
 import requests
 from scrapy import Selector
-import re
-
 from tqdm import tqdm
 
 from imgs_processing.ImgRefractor import prod_img

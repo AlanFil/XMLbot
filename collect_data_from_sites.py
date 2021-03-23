@@ -1,9 +1,10 @@
 import os
 
 from globals import STARTING_DIRECTORY
+from sites.graef import graef_manage
+from sites.krysiak import krysiak_manage
 from sites.mptech import mptech_manage
 from sites.rcpro import dji_manage
-from sites.krysiak import krysiak_manage
 from sites.samsung import samsung_manage
 from sites.scentre import scentre_manage
 
@@ -44,3 +45,8 @@ def collect_data_from_sites(full_product):
         full_product['product_folder_name_in'] = 'myPhone' + full_product['product_folder_name_in']
         create_product_folder(full_product['product_folder_name_in'])
         mptech_manage(full_product)
+
+    elif 'graef' in full_product['link'].lower():
+        full_product['product_folder_name_in'] = 'Graef' + full_product['product_folder_name_in']
+        create_product_folder(full_product['product_folder_name_in'])
+        graef_manage(full_product)

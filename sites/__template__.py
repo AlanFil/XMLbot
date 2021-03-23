@@ -10,28 +10,38 @@ eg.: separate_by_tag('span', desc[i])
 import requests
 from scrapy import Selector
 from tqdm import tqdm
-import re
-from globals import separate_by_tag
+
 from imgs_processing.ImgRefractor import prod_img
 
 
 def description(sel):
-    desc = sel.xpath('')
+    desc_raw = sel.xpath('')
 
-    for i in tqdm(range(len(desc))):
+    desc = []
+    for i in tqdm(range(len(desc_raw))):
         pass
 
     return '<div class="product-description-section">' + ''.join(desc) + '</div>'
 
 
 def short_desc(sel):
-    short = ''
-    return short
+    short_raw = sel.xpath('')
+
+    short = []
+    for i in tqdm(range(len(short_raw))):
+        pass
+
+    return '<ul>' + ''.join(short) + '</ul>'
 
 
 def tech_desc(sel):
-    tech = ''
-    return tech
+    tech_raw = sel.xpath('')
+
+    tech = []
+    for i in tqdm(range(len(tech_raw))):
+        pass
+
+    return '<table id="plan_b" class="data-table"><tbody>' + ''.join(tech) + '</tbody></table>'
 
 
 def product_imgs(link, product_folder_name_in, ean):

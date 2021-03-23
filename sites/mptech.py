@@ -10,11 +10,9 @@ from time import sleep
 
 import requests
 from scrapy import Selector
-from tqdm import tqdm
-import re
-from globals import separate_by_tag
-from imgs_processing.ImgRefractor import prod_img
 from selenium import webdriver
+
+from imgs_processing.ImgRefractor import prod_img
 
 
 def rreplace(s, old, new, occurrence):

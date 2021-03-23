@@ -8,8 +8,6 @@ Funkcja desc_img:
 
 import requests
 from PIL import Image, UnidentifiedImageError
-from requests.exceptions import InvalidURL
-from urllib3.exceptions import MaxRetryError
 
 
 def desc_img(product_folder_name, img_link, img_name, border=800, crop=False, force_small=False):
