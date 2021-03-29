@@ -23,7 +23,6 @@ def desc_img(product_folder_name, img_link, img_name, border=800, crop=False, fo
                 print(f'{img_link} - nie udało się pobrać zdjęcia z tego linku')
                 return 0
 
-
     # zweryfikuj typ pliku
     if 'jpg' in img_link[-5:].lower():
         file_type = 'jpg'

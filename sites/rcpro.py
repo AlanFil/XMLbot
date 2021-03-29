@@ -42,13 +42,13 @@ def product_imgs(link, product_folder_name, ean):
     imgs_links = sel.xpath('//*[@id="projector_form"]//ul[@class="bxslider"]//li//img/@src').extract()
 
     imgs_names = []
-    for i, img_link in enumerate(imgs_links):
-        img_link = 'https://rcpro.pl/' + img_link
+    for i in tqdm(range(len(imgs_links))):
+        img_link = 'https://rcpro.pl/' + imgs_links[i]
         if i == 0:
-            file_type = prod_img(product_folder_name, img_link, f'{ean}-{i}-base', crop=False)
+            file_type = prod_img(product_folder_name, imgs_links[i], f'{ean}-{i}-base', crop=False)
             imgs_names.append(f'{ean}-{i}-base.{file_type}')
         else:
-            file_type = prod_img(product_folder_name, img_link, f'{ean}-{i}', crop=False)
+            file_type = prod_img(product_folder_name, imgs_links[i], f'{ean}-{i}', crop=False)
             imgs_names.append(f'{ean}-{i}.{file_type}')
 
     return imgs_names

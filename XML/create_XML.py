@@ -12,7 +12,7 @@ def create_XML(root, full_product):
     for key in full_product.keys():
         if key == 'imgs' and key == 'link' and key == 'product_folder_name_in':
             continue
-        if isinstance(full_product[key], list):
+        if isinstance(full_product[key], (list, bool)):
             continue
         xml.SubElement(params, key).text = full_product[key]
 

@@ -4,13 +4,13 @@ from time import gmtime, strftime
 from FTP_connection.transfer import *
 from XML.create_XML import create_XML
 from XML.preview_html import preview_html
-from collect_data_from_sites import collect_data_from_sites
-from collect_data_oyo import collect_data_oyo
+from collecting_data.collect_data_from_sites import collect_data_from_sites
+from collecting_data.collect_data_oyo import collect_data_oyo
 from imgs_processing.download_imgs_and_replace_links import download_imgs_and_replace_links
 
 if __name__ == '__main__':
     """ HARD CODE ALERT """
-    products = """""".split('\n')
+    products = """KH6I19BS00EU	Płyta indukcyjna SHARP KH-6I19BS00-EU	2021032917	9999	SHARP	Matrix .xls	https://sharphome.eu/pl/sharp/gotowanie/kh-6i19bs00/""".split('\n')
     """ HARD CODE ALERT """
 
     # define an XML file to write products data inside
@@ -30,7 +30,7 @@ if __name__ == '__main__':
             continue
 
         # (4) download imgs from description and replace links
-        download_imgs_and_replace_links(full_product['product_folder_name_in'], full_product['descriptions'][0])
+        download_imgs_and_replace_links(full_product)
 
         # (5) create XML out of collected data
         tree = create_XML(root, full_product)

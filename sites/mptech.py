@@ -11,6 +11,7 @@ from time import sleep
 import requests
 from scrapy import Selector
 from selenium import webdriver
+from tqdm import tqdm
 
 from imgs_processing.ImgRefractor import prod_img
 
@@ -113,13 +114,14 @@ def product_imgs(link, product_folder_name_in, ean):
     driver.close()
 
     links = list(dict.fromkeys(links))  # remove duplicates
+
     imgs_names = []
-    for i, img_link in enumerate(links):
+    for i in tqdm(range(len(links))):
         if i == 0:
-            file_type = prod_img(product_folder_name_in, img_link, f'{ean}-{i}-base', crop=False)
+            file_type = prod_img(product_folder_name_in, links[i], f'{ean}-{i}-base', crop=False)
             imgs_names.append(f'{ean}-{i}-base.{file_type}')
         else:
-            file_type = prod_img(product_folder_name_in, img_link, f'{ean}-{i}', crop=False)
+            file_type = prod_img(product_folder_name_in, links[i], f'{ean}-{i}', crop=False)
             imgs_names.append(f'{ean}-{i}.{file_type}')
 
     return imgs_names
