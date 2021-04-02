@@ -10,7 +10,10 @@ from imgs_processing.download_imgs_and_replace_links import download_imgs_and_re
 
 if __name__ == '__main__':
     """ HARD CODE ALERT """
-    products = """KH6I19BS00EU	Płyta indukcyjna SHARP KH-6I19BS00-EU	2021032917	9999	SHARP	Matrix .xls	https://sharphome.eu/pl/sharp/gotowanie/kh-6i19bs00/""".split('\n')
+    products = """""".split('\n')
+
+    send_via_FTP = True
+    print_result = True
     """ HARD CODE ALERT """
 
     # define an XML file to write products data inside
@@ -35,7 +38,7 @@ if __name__ == '__main__':
         # (5) create XML out of collected data
         tree = create_XML(root, full_product)
 
-    if tree is not None:
+    if send_via_FTP and tree is not None:
         xml_file_name = f'Products_{strftime("%Y%m%d%H%M%S", gmtime())}.xml'
 
         with open(f'bin\\{xml_file_name}', 'wb') as file:
@@ -51,6 +54,13 @@ if __name__ == '__main__':
             send_products_imgs_via_FTP(FTP, folder)  # send product images via FTP
             send_XML_via_FTP(FTP, xml_file_name)  # send XML via FTP
             close_FTP_connection(FTP)
+
+    if print_result:
+        print(full_product["descriptions"][0])
+        print('=' * 15)
+        print(full_product["descriptions"][1])
+        print('=' * 15)
+        print(full_product["descriptions"][2])
 
     print(f'Opuszczono: ')
     [print(f"{i}. {ele}") for i, ele in enumerate(passed)] if passed else print('Wszystkie produkty zostały dodane')

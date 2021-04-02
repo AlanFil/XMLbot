@@ -15,7 +15,7 @@ def desc_img(product_folder_name, img_link, img_name, border=800, crop=False, fo
         res = requests.get(img_link)
     except:
         try:
-            res = requests.get(img_link.replace('//', ''))
+            res = requests.get(img_link.replace('//', 'https://', 1))
         except:
             try:
                 res = requests.get('https://' + img_link)

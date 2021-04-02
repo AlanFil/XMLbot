@@ -5,8 +5,6 @@ for i, ele in enumerate(desc):
 use: separate_by_tag(tag, txt)
 eg.: separate_by_tag('span', desc[i])
 """
-
-
 import requests
 from scrapy import Selector
 from tqdm import tqdm
@@ -18,7 +16,7 @@ def description(sel):
     desc_raw = sel.xpath('')
 
     desc = []
-    for i in tqdm(range(len(desc_raw))):
+    for i in range(len(desc_raw)):
         pass
 
     return '<div class="product-description-section">' + ''.join(desc) + '</div>'
@@ -28,7 +26,7 @@ def short_desc(sel):
     short_raw = sel.xpath('')
 
     short = []
-    for i in tqdm(range(len(short_raw))):
+    for i in range(len(short_raw)):
         pass
 
     return '<ul>' + ''.join(short) + '</ul>'
@@ -38,7 +36,7 @@ def tech_desc(sel):
     tech_raw = sel.xpath('')
 
     tech = []
-    for i in tqdm(range(len(tech_raw))):
+    for i in range(len(tech_raw)):
         pass
 
     return '<table id="plan_b" class="data-table"><tbody>' + ''.join(tech) + '</tbody></table>'
@@ -46,13 +44,12 @@ def tech_desc(sel):
 
 def product_imgs(link, product_folder_name_in, ean):
     sel = Selector(text=requests.get(link).content)
-    imgs_links = []
-    for img in sel.xpath('').extract():
-        imgs_links.append(img)
+    imgs_links = [img for img in sel.xpath('').extract()]
 
     imgs_links = list(dict.fromkeys(imgs_links))  # remove duplicates
 
     imgs_names = []
+    print("Pobieranie zdjęć produktu...")
     for i in tqdm(range(len(imgs_links))):
         if i == 0:
             file_type = prod_img(product_folder_name_in, imgs_links[i], f'{ean}-{i}-base', crop=False)
