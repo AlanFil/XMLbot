@@ -13,7 +13,7 @@ if __name__ == '__main__':
     products = """""".split('\n')
 
     send_via_FTP = True
-    print_result = True
+    print_result = False
     """ HARD CODE ALERT """
 
     # define an XML file to write products data inside

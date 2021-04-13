@@ -24,13 +24,12 @@ def desc_img(product_folder_name, img_link, img_name, border=800, crop=False, fo
                 return 0
 
     # zweryfikuj typ pliku
-    if 'jpg' in img_link[-5:].lower():
+    if 'jpg' in img_link[-5:].lower() or 'jpeg' in img_link[-5:].lower():
         file_type = 'jpg'
     elif 'png' in img_link[-5:].lower():
         file_type = 'png'
     else:
-        print('Rozszerzenie różne niż .jpg i .png. Przypisuję .jpg')
-        print(img_link)
+        print('Rozszerzenie różne niż .jpg i .png. Przypisuję .jpg: ' + img_link)
         file_type = 'jpg'
 
     IMAGE_PATH = f'bin/{product_folder_name}/description_imgs/{img_name}.{file_type}'
@@ -63,7 +62,10 @@ def desc_img(product_folder_name, img_link, img_name, border=800, crop=False, fo
         im = im.resize((new_width, new_height))
 
     # zapisz plik
-    im.save(IMAGE_PATH)
+    try:
+        im.save(IMAGE_PATH)
+    except OSError:
+        print('Nie udało się zapisać zdjęcia: ' + img_link)
 
     return file_type
 

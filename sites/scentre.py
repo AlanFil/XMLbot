@@ -6,7 +6,6 @@ use: separate_by_tag(tag, txt)
 eg.: separate_by_tag('span', desc[i])
 """
 
-
 import requests
 from scrapy import Selector
 from tqdm import tqdm
@@ -15,11 +14,31 @@ from imgs_processing.ImgRefractor import prod_img
 
 
 def description(sel):
-    desc = sel.xpath('//div[@class="tab-content"]//div[contains(@id, "tab0")]/*')
+    desc_raw = sel.xpath('//div[@class="tab-content"]//div[contains(@id, "tab0")]//div[@class="content"]/*')
 
-    for i in tqdm(range(len(desc))):
-        pass
-    return desc
+    desc = []
+    for i in range(len(desc_raw)):
+        if 'h2' not in desc_raw[i].extract():
+            continue
+
+        title = ''.join(desc_raw[i].xpath('.//h2[@class="feature_title"]//text()').extract())
+        content = ''.join(desc_raw[i].xpath('.//div[@class="feature_desc"]//text()').extract())
+        img = ''.join(desc_raw[i].xpath('.//div[@class="feature_image"]//img/@src').extract())
+        img = 'https://scentre.pl' + img if not img.startswith('https://scentre.pl') else img
+
+        desc.append(
+            f"""
+            <div class="two-col-asymmetrically">
+                <div class="right-side">
+                    <h2 class="important-header">{title}</h2>
+                    <p>{content}</p>
+                </div>
+                
+                <img alt="" src="{img}" />
+            </div>
+            """)
+
+    return '<div class="product-description-section">' + ''.join(desc) + '</div>'
 
 
 def short_desc(sel):
@@ -88,9 +107,17 @@ def scentre_manage(full_product):
     full_product['manufacturer'] = '252'
     full_product['pickup_store'] = '1,2,3,4,7,8,9,10,11,21,25'
     full_product['descriptions'] = scentre_descriptions(full_product['link'])
-    full_product['imgs'] = product_imgs(full_product['link'], full_product['product_folder_name_in'], full_product['sku'])
+    full_product['imgs'] = product_imgs(full_product['link'], full_product['product_folder_name_in'],
+                                        full_product['sku'])
 
 
 if __name__ == '__main__':
-    full_product = {'descriptions': ['<p></p>', '', ''], 'name': 'TVC SONY 55" XR55A90JAEP', 'sku': '4548736123274', 'weight': '1', 'status': '2', 'manufacturer': '0', 'url_key': 'TVC SONY 55" XR55A90JAEP', 'manufacturer_code': 'XR55A90JAEP', 'link_ceneo': '', 'pickup_store': '', 'search_keywords': '', 'search_priority': '', 'price_negotiation_hide': '0', 'question_form_show': '0', 'price': '9999.99', 'tax_class_id': '0', 'rule': '64', 'supplier': '4', 'export_ceneo': '1', 'product_info_tabs_categories': '', 'imgs': [], 'link': 'https://scentre.pl/shop/product/show?produkt=telewizor_sony_oled_65_cali_xr_65a90j_sluchawki_sony_wh_1000xm4', 'product_folder_name_in': 'Sony - XR55A90JAEP', 'attribute_set_id': '4'}
+    full_product = {'descriptions': ['<p></p>', '', ''], 'name': 'TVC SONY 55" XR55A90JAEP', 'sku': '4548736123274',
+                    'weight': '1', 'status': '2', 'manufacturer': '0', 'url_key': 'TVC SONY 55" XR55A90JAEP',
+                    'manufacturer_code': 'XR55A90JAEP', 'link_ceneo': '', 'pickup_store': '', 'search_keywords': '',
+                    'search_priority': '', 'price_negotiation_hide': '0', 'question_form_show': '0', 'price': '9999.99',
+                    'tax_class_id': '0', 'rule': '64', 'supplier': '4', 'export_ceneo': '1',
+                    'product_info_tabs_categories': '', 'imgs': [],
+                    'link': 'https://scentre.pl/shop/product/show?produkt=telewizor_sony_oled_65_cali_xr_65a90j_sluchawki_sony_wh_1000xm4',
+                    'product_folder_name_in': 'Sony - XR55A90JAEP', 'attribute_set_id': '4'}
     scentre_manage(full_product)

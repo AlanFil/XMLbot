@@ -8,7 +8,6 @@ from imgs_processing.ImgRefractor import prod_img
 
 
 def description(sel):
-    print('Zbieranie danych z opisu')
     benefit = sel.xpath('//*[@id="benefit"]/*').extract()
     benefit = [ele.replace('\n', '').replace('\t', '') for ele in benefit if not ele.startswith('<input')]
 

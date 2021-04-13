@@ -11,6 +11,7 @@ from sites.rtveuroagd import rtveuroagd_manage
 from sites.samsung import samsung_manage
 from sites.scentre import scentre_manage
 from sites.sharp import sharp_manage
+from sites.philips_hue import philips_hue_manage
 
 
 def create_product_folder(product_folder_name):
@@ -69,6 +70,16 @@ def collect_data_from_sites(full_product):
         full_product['product_folder_name_in'] = 'Blaupunkt' + full_product['product_folder_name_in']
         create_product_folder(full_product['product_folder_name_in'])
         blaupunkt_manage(full_product)
+
+    elif 'euro.com' in full_product['link'].lower():
+        full_product['product_folder_name_in'] = 'Sharp' + full_product['product_folder_name_in']
+        create_product_folder(full_product['product_folder_name_in'])
+        rtveuroagd_manage(full_product)
+
+    elif 'philips-hue.' in full_product['link'].lower():
+        full_product['product_folder_name_in'] = 'Philips_HUE' + full_product['product_folder_name_in']
+        create_product_folder(full_product['product_folder_name_in'])
+        philips_hue_manage(full_product)
 
     else:
         print('Nie przypisano metody zbierania danych')
