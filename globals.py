@@ -28,3 +28,7 @@ def separate_by_tag(tag, txt):
             break
 
     return separated_elements
+
+
+def join_strip(text):
+    return ''.join(text).strip()

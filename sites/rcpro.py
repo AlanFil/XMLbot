@@ -43,7 +43,7 @@ def product_imgs(link, product_folder_name, ean):
 
     imgs_names = []
     for i in tqdm(range(len(imgs_links))):
-        img_link = 'https://rcpro.pl/' + imgs_links[i]
+        imgs_links[i] = 'https://rcpro.pl' + imgs_links[i] if not imgs_links[i].startswith('https://rcpro.pl') else imgs_links[i]
         if i == 0:
             file_type = prod_img(product_folder_name, imgs_links[i], f'{ean}-{i}-base', crop=False)
             imgs_names.append(f'{ean}-{i}-base.{file_type}')

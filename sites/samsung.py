@@ -167,5 +167,4 @@ def samsung_manage(full_product):
     full_product['manufacturer'] = '246'
     full_product['pickup_store'] = '1,5,6,12,13,14,15,16,17,18,19,20,23'
     full_product['descriptions'] = samsung_descriptions(full_product['link'])
-    full_product['imgs'] = []
-    full_product['imgs'] = product_imgs(full_product['link'], full_product['product_folder_name_in'], full_product['sku'])
+    # full_product['imgs'] = product_imgs(full_product['link'], full_product['product_folder_name_in'], full_product['sku'])

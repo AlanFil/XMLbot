@@ -1,4 +1,5 @@
 import os
+from time import sleep
 
 import keyboard
 
@@ -28,7 +29,7 @@ def add_mm_css(desc):
     return desc
 
 
-def preview_html(desc, ean):
+def preview_html(desc, ean, yes_to_all):
     while 'src="//' in desc:
         desc = desc.replace('src="//', 'src="https://')
 
@@ -36,15 +37,21 @@ def preview_html(desc, ean):
         # add MatrixMedia CSS files
         preview.write(add_mm_css(desc))
 
-    # open "preview.html" file and wait for a user to confirm it
-    print('Zatwierdź klawiszem "Enter" lub odrzuć klawiszem "Esc"')
-    os.startfile('preview.html')
-    while True:
-        if keyboard.is_pressed('Enter'):
-            os.remove('preview.html')  # remove "preview.html" file
-            print(f'Zatwierdzono: {ean}')
-            return 0
-        elif keyboard.is_pressed('Esc'):
-            os.remove('preview.html')  # remove "preview.html" file
-            print(f'Odrzucono: {ean}')
-            return -1
+    os.startfile('preview.html')  # open "preview.html" file
+    sleep(1)  # let the file being opened before it is removed
+
+    if yes_to_all is False:
+        print('Zatwierdź klawiszem "Enter" lub odrzuć klawiszem "Esc"')
+
+        # wait for a user to confirm it
+        while True:
+            if keyboard.is_pressed('Enter'):
+                print(f'Zatwierdzono: {ean}')
+                return 0
+            elif keyboard.is_pressed('Esc'):
+                print(f'Odrzucono: {ean}')
+                return -1
+    else:
+        print(f'Zatwierdzono automatycznie: {ean}')
+
+    os.remove('preview.html')  # remove "preview.html" file

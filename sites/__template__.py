@@ -79,3 +79,4 @@ def XXX_manage(full_product):
 
 # full_product =
 # link = full_product['link']
+# sel = Selector(text=requests.get(link).content)
