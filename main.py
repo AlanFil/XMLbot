@@ -10,12 +10,7 @@ from imgs_processing.download_imgs_and_replace_links import download_imgs_and_re
 
 if __name__ == '__main__':
     """ HARD CODE ALERT """
-    products = """NB-AS-A009	ASUS NB ExpertBook P2540FA-DM0561R i3-1011U 15.6 FHD 8GB DDR4 256GB Intel® UHD 3Y OnSite Win10Pro 90NX02L1-M07240	4718017950534	9999	None	Matrix	https://sklepasus.pl/laptopy-i-notebooki/asus-p2540fa-dm0561r-i3-10110u-15-6i-8gb
-NB-AS-A010	ASUS NB ExpertBook P2540FA-DM0561T i3-1011U 15.6 FHD 8GB DDR4 256GB Intel® UHD 3Y OnSite Win10H 90NX02L1-M07130	4718017950541	9999	None	Matrix	https://sklepasus.pl/laptopy-i-notebooki/asus-expertbook-p2-p2450-p2540fa-dm0561t
-NB-AS-A011	ASUS NB ExpertBook P2540FA-DM0562R i5-10210U 15.6 FHD 8GB DDR4 256GB Intel® UHD 3Y OnSite Win10Pro 90NX02L1-M07140	4718017950572	9999	None	Matrix	https://sklepasus.pl/laptopy-i-notebooki/asus-expertbook-p2-p2450-p2540fa-dm0562r
-NB-AS-A012	ASUS NB ExpertBook P2451FA-EB0116R i3-10110U 14.0 FHD 8GB DDR4 256GB Intel® UHD 3Y OnSite Win10Pro 90NX02N1-M01380	4718017850315	9999	None	Matrix	https://sklepasus.pl/laptopy-i-notebooki/asus-expertbook-p2-p2451
-NB-AS-A013	ASUS NB ExpertBook P2451FB-EB0018R i5-10210U 14.0 FHD 8GB DDR4 256GB GeForce MX110 3Y OnSite Win10Pro 90NX02P1-M00300	4718017857239	9999	None	Matrix	https://sklepasus.pl/laptopy-i-notebooki/asus-expertbook-p2-p2451-1
-NB-AS-A014	ASUS NB ExpertBook P2540FA-DM0562T i5-10210U 15.6 FHD 8GB DDR4 256GB Intel® UHD 3Y OnSite Win10H 90NX02L1-M07660	4718017950565	9999	None	Matrix	https://sklepasus.pl/laptopy-i-notebooki/asus-expertbook-p2-p2450-p2540fa-dm0562t""".split('\n')
+    products = """""".split('\n')
 
     send_via_FTP = True
     print_result = True

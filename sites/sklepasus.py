@@ -86,7 +86,3 @@ def sklepasus_manage(full_product):
     full_product['pickup_store'] = '1'
     full_product['descriptions'] = sklepasus_descriptions(full_product['link'])
     full_product['imgs'] = product_imgs(full_product['link'], full_product['product_folder_name_in'], full_product['sku'])
-
-# full_product = {'descriptions': ['<p></p>', '', ''], 'name': 'ASUS NB ExpertBook P2451FA-EB0117T i5-10210U 14.0 FHD 8GB DDR4 256GB Intel® UHD 3Y OnSite Win10H 90NX02N1-M12750', 'sku': '4718017949910', 'weight': '1', 'status': '2', 'manufacturer': '5878', 'url_key': 'ASUS NB ExpertBook P2451FA-EB0117T i5-10210U 14.0 FHD 8GB DDR4 256GB Intel® UHD 3Y OnSite Win10H 90NX02N1-M12750', 'manufacturer_code': 'NB-AS-A005', 'link_ceneo': '', 'pickup_store': '1', 'search_keywords': '', 'search_priority': '', 'price_negotiation_hide': '0', 'question_form_show': '0', 'price': '9999.99', 'tax_class_id': '0', 'rule': '0', 'supplier': '4', 'export_ceneo': '1', 'product_info_tabs_categories': '', 'imgs': [], 'link': 'https://sklepasus.pl/laptopy-i-notebooki/asus-p2451fa-eb0117t-i5-10210u-14i-8gb', 'product_folder_name_in': 'ASUS - NBASA005', 'attribute_set_id': '4', 'forceSmallImg': False}
-# link = full_product['link']
-# sel = Selector(text=requests.get(link).content)
