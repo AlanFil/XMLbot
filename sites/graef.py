@@ -1,17 +1,11 @@
-"""
-for i, ele in enumerate(desc):
-    print(f'{i}. {ele}')
-
-use: separate_by_tag(tag, txt)
-eg.: separate_by_tag('span', desc[i])
-"""
-
 import requests
 from scrapy import Selector
 from tqdm import tqdm
 import re
 
+from globals import func_name
 from imgs_processing.ImgRefractor import prod_img
+from imgs_processing.save_images import save_images
 
 
 def description(sel):
@@ -92,19 +86,9 @@ def product_imgs(link, product_folder_name_in, ean):
         img = 'https://www.graef.pl' + img if not img.startswith('https://www.graef.pl') else img
         imgs_links.append(img)
 
-    imgs_links = list(dict.fromkeys(imgs_links))  # remove duplicates
-
-    imgs_names = []
-    for i in tqdm(range(len(imgs_links))):
-        if i == 0:
-            file_type = prod_img(product_folder_name_in, imgs_links[i], f'{ean}-{i}-base', crop=False)
-            imgs_names.append(f'{ean}-{i}-base.{file_type}')
-        else:
-            file_type = prod_img(product_folder_name_in, imgs_links[i], f'{ean}-{i}', crop=False)
-            imgs_names.append(f'{ean}-{i}.{file_type}')
+    imgs_names = save_images(imgs_links, product_folder_name_in, ean)
 
     return imgs_names
-
 
 
 def graef_descriptions(link):
@@ -116,12 +100,10 @@ def graef_descriptions(link):
     return [desc, short, tech]
 
 
+@func_name
 def graef_manage(full_product):
     full_product['manufacturer'] = '6745'
     full_product['pickup_store'] = '1'
     full_product['descriptions'] = graef_descriptions(full_product['link'])
     full_product['imgs'] = product_imgs(full_product['link'], full_product['product_folder_name_in'],
                                         full_product['sku'])
-
-# full_product = {'descriptions': ['<p></p>', '', ''], 'name': 'Krajalnica uniwersalna GRAEF SKS 50000', 'sku': '4001627023263', 'weight': '1', 'status': '2', 'manufacturer': '0', 'url_key': 'Krajalnica uniwersalna GRAEF SKS 50000', 'manufacturer_code': 'Z094700', 'link_ceneo': '', 'pickup_store': '', 'search_keywords': '', 'search_priority': '', 'price_negotiation_hide': '0', 'question_form_show': '0', 'price': '9999.99', 'tax_class_id': '0', 'rule': '0', 'supplier': '27', 'export_ceneo': '1', 'product_info_tabs_categories': '', 'imgs': [], 'link': 'https://www.graef.pl/pl/p/Krajalnica-uniwersalna-GRAEF-S50000/22706652', 'product_folder_name_in': 'Graef - Z094700', 'attribute_set_id': '4'}
-# link = full_product['link']

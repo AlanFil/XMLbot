@@ -4,7 +4,9 @@ import requests
 from scrapy import Selector
 from tqdm import tqdm
 
+from globals import func_name
 from imgs_processing.ImgRefractor import prod_img
+from imgs_processing.save_images import save_images
 
 
 def description(sel):
@@ -139,16 +141,7 @@ def product_imgs(link, product_folder_name_in, ean):
         new_link = img.replace('//', 'https://').replace('$LazyLoad_Home', '').replace('$684_547', '')
         imgs_links.append(new_link)
 
-    imgs_links = list(dict.fromkeys(imgs_links))  # remove duplicates
-
-    imgs_names = []
-    for i in tqdm(range(len(imgs_links))):
-        if i == 0:
-            file_type = prod_img(product_folder_name_in, imgs_links[i], f'{ean}-{i}-base', crop=False)
-            imgs_names.append(f'{ean}-{i}-base.{file_type}')
-        else:
-            file_type = prod_img(product_folder_name_in, imgs_links[i], f'{ean}-{i}', crop=False)
-            imgs_names.append(f'{ean}-{i}.{file_type}')
+    imgs_names = save_images(imgs_links, product_folder_name_in, ean)
 
     return imgs_names
 
@@ -163,8 +156,9 @@ def samsung_descriptions(link):
     return [desc, short, tech]
 
 
+@func_name
 def samsung_manage(full_product):
     full_product['manufacturer'] = '246'
     full_product['pickup_store'] = '1,5,6,12,13,14,15,16,17,18,19,20,23'
     full_product['descriptions'] = samsung_descriptions(full_product['link'])
-    # full_product['imgs'] = product_imgs(full_product['link'], full_product['product_folder_name_in'], full_product['sku'])
+    full_product['imgs'] = product_imgs(full_product['link'], full_product['product_folder_name_in'], full_product['sku'])

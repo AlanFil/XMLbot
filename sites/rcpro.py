@@ -6,8 +6,9 @@ import requests
 from scrapy import Selector
 from tqdm import tqdm
 
-from globals import separate_by_tag
+from globals import separate_by_tag, func_name
 from imgs_processing.ImgRefractor import prod_img
+from imgs_processing.save_images import save_images
 
 
 def description(sel):
@@ -18,7 +19,8 @@ def description(sel):
 
         for span in separate_by_tag('span', desc[i]):
             if 'font-size: 14px' in span:
-                span.replace(re.search(r'<span.*?>', span).group(), '<h1 class="important-header" style="text-align: center;">')
+                span.replace(re.search(r'<span.*?>', span).group(),
+                             '<h1 class="important-header" style="text-align: center;">')
                 span.replace('</span>', '</h1>')
                 if len(short_desc) < 7:
                     short_desc.append(span[span.find('>'):span.rfind('<')])
@@ -28,7 +30,7 @@ def description(sel):
 
         desc[i] = desc[i].replace('src="/data', 'src="https://rcpro.pl/data')
 
-    return '<div class="product-description-section">' + ''.join(desc) + '</div>',\
+    return '<div class="product-description-section">' + ''.join(desc) + '</div>', \
            '<ul>' + ''.join(short_desc) + '</ul>'
 
 
@@ -37,19 +39,12 @@ def tech_desc(sel):
     return tech
 
 
-def product_imgs(link, product_folder_name, ean):
+def product_imgs(link, product_folder_name_in, ean):
     sel = Selector(text=requests.get(link).content)
     imgs_links = sel.xpath('//*[@id="projector_form"]//ul[@class="bxslider"]//li//img/@src').extract()
+    imgs_links = ['https://rcpro.pl' + img for img in imgs_links if not img.startswith('https://rcpro.pl')]
 
-    imgs_names = []
-    for i in tqdm(range(len(imgs_links))):
-        imgs_links[i] = 'https://rcpro.pl' + imgs_links[i] if not imgs_links[i].startswith('https://rcpro.pl') else imgs_links[i]
-        if i == 0:
-            file_type = prod_img(product_folder_name, imgs_links[i], f'{ean}-{i}-base', crop=False)
-            imgs_names.append(f'{ean}-{i}-base.{file_type}')
-        else:
-            file_type = prod_img(product_folder_name, imgs_links[i], f'{ean}-{i}', crop=False)
-            imgs_names.append(f'{ean}-{i}.{file_type}')
+    imgs_names = save_images(imgs_links, product_folder_name_in, ean)
 
     return imgs_names
 
@@ -63,13 +58,10 @@ def dji_descriptions(link):
     return [desc, short, tech]
 
 
+@func_name
 def dji_manage(full_product):
     full_product['manufacturer'] = '185'  # DJI
     full_product['pickup_store'] = '1'
     full_product['descriptions'] = dji_descriptions(full_product['link'])
-    full_product['imgs'] = product_imgs(full_product['link'], full_product['product_folder_name_in'], full_product['sku'])
-
-
-if __name__ == '__main__':
-    full_product = {'descriptions': ['<p></p>', '', ''], 'name': 'Ubezpieczenie DJI Care Refresh FPV - plan dwuletni (kod elektroniczny)', 'sku': '6941565908087', 'weight': '1', 'status': '2', 'manufacturer': '0', 'url_key': 'Ubezpieczenie DJI Care Refresh FPV - plan dwuletni (kod elektroniczny)', 'manufacturer_code': 'CP.QT.00004421.01', 'link_ceneo': '', 'pickup_store': '', 'search_keywords': '', 'search_priority': '', 'price_negotiation_hide': '0', 'question_form_show': '0', 'price': '9999.99', 'tax_class_id': '0', 'rule': '121', 'supplier': '30', 'export_ceneo': '1', 'product_info_tabs_categories': '', 'imgs': [], 'link': 'https://rcpro.pl/product-pol-20077-DJI-Care-Refresh-FPV-dwuletni-plan-kod-elektroniczny.html?query_id=1', 'product_folder_name_in': ' - CPQT0000442101', 'attribute_set_id': '4'}
-    dji_manage(full_product)
+    full_product['imgs'] = product_imgs(full_product['link'], full_product['product_folder_name_in'],
+                                        full_product['sku'])

@@ -1,16 +1,10 @@
-"""
-for i, ele in enumerate(desc):
-    print(f'{i}. {ele}')
-
-use: separate_by_tag(tag, txt)
-eg.: separate_by_tag('span', desc[i])
-"""
-
 import requests
 from scrapy import Selector
 from tqdm import tqdm
 
+from globals import func_name
 from imgs_processing.ImgRefractor import prod_img
+from imgs_processing.save_images import save_images
 
 
 def description(sel):
@@ -50,7 +44,7 @@ def tech_desc(sel):
     tech = sel.xpath('//div[@class="tab-content"]//div[contains(@id, "tab1")]/*')
 
     tech_ready = []
-    for i in tqdm(range(len(tech))):
+    for i in range(len(tech)):
         tech_ready.append(
             '<tr class="specs_category"><td colspan="2">' +
             ''.join(tech[i].xpath('.//div[@class="name"]//text()').extract()).strip() +
@@ -76,19 +70,9 @@ def product_imgs(link, product_folder_name_in, ean):
     imgs_links = []
     for img in sel.xpath('//div[contains(@class, "product_image_master")]/img/@src').extract():
         new_link = 'https://scentre.pl/' + img
-        print(new_link)
         imgs_links.append(new_link)
 
-    imgs_links = list(dict.fromkeys(imgs_links))  # remove duplicates
-
-    imgs_names = []
-    for i in tqdm(range(len(imgs_links))):
-        if i == 0:
-            file_type = prod_img(product_folder_name_in, imgs_links[i], f'{ean}-{i}-base', crop=False)
-            imgs_names.append(f'{ean}-{i}-base.{file_type}')
-        else:
-            file_type = prod_img(product_folder_name_in, imgs_links[i], f'{ean}-{i}', crop=False)
-            imgs_names.append(f'{ean}-{i}.{file_type}')
+    imgs_names = save_images(imgs_links, product_folder_name_in, ean)
 
     return imgs_names
 
@@ -103,21 +87,10 @@ def scentre_descriptions(link):
     return [desc, short, tech]
 
 
+@func_name
 def scentre_manage(full_product):
     full_product['manufacturer'] = '252'
     full_product['pickup_store'] = '1,2,3,4,7,8,9,10,11,21,25'
     full_product['descriptions'] = scentre_descriptions(full_product['link'])
     full_product['imgs'] = product_imgs(full_product['link'], full_product['product_folder_name_in'],
                                         full_product['sku'])
-
-
-if __name__ == '__main__':
-    full_product = {'descriptions': ['<p></p>', '', ''], 'name': 'TVC SONY 55" XR55A90JAEP', 'sku': '4548736123274',
-                    'weight': '1', 'status': '2', 'manufacturer': '0', 'url_key': 'TVC SONY 55" XR55A90JAEP',
-                    'manufacturer_code': 'XR55A90JAEP', 'link_ceneo': '', 'pickup_store': '', 'search_keywords': '',
-                    'search_priority': '', 'price_negotiation_hide': '0', 'question_form_show': '0', 'price': '9999.99',
-                    'tax_class_id': '0', 'rule': '64', 'supplier': '4', 'export_ceneo': '1',
-                    'product_info_tabs_categories': '', 'imgs': [],
-                    'link': 'https://scentre.pl/shop/product/show?produkt=telewizor_sony_oled_65_cali_xr_65a90j_sluchawki_sony_wh_1000xm4',
-                    'product_folder_name_in': 'Sony - XR55A90JAEP', 'attribute_set_id': '4'}
-    scentre_manage(full_product)

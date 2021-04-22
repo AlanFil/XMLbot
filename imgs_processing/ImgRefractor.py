@@ -23,7 +23,7 @@ def desc_img(product_folder_name, img_link, img_name, border=800, crop=False, fo
                 print(f'{img_link} - nie udało się pobrać zdjęcia z tego linku')
                 return 0
 
-    # zweryfikuj typ pliku
+    # verify file type
     if 'jpg' in img_link[-5:].lower() or 'jpeg' in img_link[-5:].lower():
         file_type = 'jpg'
     elif 'png' in img_link[-5:].lower():
@@ -33,7 +33,7 @@ def desc_img(product_folder_name, img_link, img_name, border=800, crop=False, fo
         file_type = 'jpg'
 
     IMAGE_PATH = f'bin/{product_folder_name}/description_imgs/{img_name}.{file_type}'
-    # pobierz zdjęcie
+    # download an image
     with open(IMAGE_PATH, 'wb') as file_format:
         file_format.write(res.content)
 
@@ -42,11 +42,11 @@ def desc_img(product_folder_name, img_link, img_name, border=800, crop=False, fo
     except UnidentifiedImageError:
         return 0
 
-    # przytnij pustą przestrzeń
+    # crop empty area
     if crop:
         im = im.crop(im.getbbox())
 
-    # przeskalowanie do zdjęcia na pół ekranu lub cały
+    # scaling image to half- or fullscreen width
     width, height = im.size
     # size = 'full'
     ratio = 1
@@ -61,7 +61,7 @@ def desc_img(product_folder_name, img_link, img_name, border=800, crop=False, fo
         new_height = round(height / ratio)
         im = im.resize((new_width, new_height))
 
-    # zapisz plik
+    # save image changes
     try:
         im.save(IMAGE_PATH)
     except OSError:
@@ -73,7 +73,7 @@ def desc_img(product_folder_name, img_link, img_name, border=800, crop=False, fo
 def prod_img(product_folder_name, img_link, img_name, crop=False):
     res = requests.get(img_link)
 
-    # zweryfikuj typ pliku
+    # verify file type
     if 'jpg' in img_link[-5:].lower():
         file_type = 'jpg'
     elif 'png' in img_link[-5:].lower():
@@ -84,8 +84,12 @@ def prod_img(product_folder_name, img_link, img_name, crop=False):
         file_type = 'jpg'
 
     IMAGE_PATH = f'bin/{product_folder_name}/product_imgs/{img_name}.{file_type}'
-    # pobierz zdjęcie
+    IMAGE_PATH_RAW = f'bin/{product_folder_name}/product_imgs_raw/{img_name}.{file_type}'
+    # download an image
     with open(IMAGE_PATH, 'wb') as file_format:
+        file_format.write(res.content)
+    # download an image that will not be modified
+    with open(IMAGE_PATH_RAW, 'wb') as file_format:
         file_format.write(res.content)
 
     try:
@@ -93,11 +97,11 @@ def prod_img(product_folder_name, img_link, img_name, crop=False):
     except UnidentifiedImageError:
         return 0
 
-    # przytnij pustą przestrzeń
+    # crop empty area
     if crop:
         im = im.crop(im.getbbox())
 
-    # przeskalowanie do zdjęcia do rozmiarów na MatrixMedia
+    # scaling photo for MatrixMedia sizes
     width, height = im.size
     if width > 600:
         ratio = width / 600
@@ -105,10 +109,10 @@ def prod_img(product_folder_name, img_link, img_name, crop=False):
         new_height = round(height / ratio)
         im = im.resize((new_width, new_height))
 
-    # zapisz plik
+    # save changed image
     try:
         im.save(IMAGE_PATH)
     except OSError:
-        print(f'OSError. Nie udało się zapisać zdjęcia: {img_link}')
+        print(f'WARNING: OSError. Could save a photo: {img_link}')
 
     return file_type

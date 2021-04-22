@@ -1,17 +1,12 @@
-"""
-for i, ele in enumerate(desc):
-    print(f'{i}. {ele}')
-
-use: separate_by_tag(tag, txt)
-eg.: separate_by_tag('span', desc[i])
-"""
 import re
 
 import requests
 from scrapy import Selector
 from tqdm import tqdm
 
+from globals import func_name
 from imgs_processing.ImgRefractor import prod_img
+from imgs_processing.save_images import save_images
 
 
 def description(sel):
@@ -69,17 +64,7 @@ def product_imgs(link, product_folder_name_in, ean):
     imgs_links = ['https://www.blaupunkt.com/' + img for img in
                   sel.xpath('//div[@id="product_gallery_new"]//img/@src').extract()]
 
-    imgs_links = list(dict.fromkeys(imgs_links))  # remove duplicates
-
-    imgs_names = []
-    print("Pobieranie zdjęć produktu...")
-    for i in tqdm(range(len(imgs_links))):
-        if i == 0:
-            file_type = prod_img(product_folder_name_in, imgs_links[i], f'{ean}-{i}-base', crop=False)
-            imgs_names.append(f'{ean}-{i}-base.{file_type}')
-        else:
-            file_type = prod_img(product_folder_name_in, imgs_links[i], f'{ean}-{i}', crop=False)
-            imgs_names.append(f'{ean}-{i}.{file_type}')
+    imgs_names = save_images(imgs_links, product_folder_name_in, ean)
 
     return imgs_names
 
@@ -93,6 +78,7 @@ def blaupunkt_descriptions(link):
     return [desc, short, tech]
 
 
+@func_name
 def blaupunkt_manage(full_product):
     full_product['manufacturer'] = '170'
     full_product['pickup_store'] = '1'

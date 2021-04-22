@@ -1,0 +1,26 @@
+try {
+var goadservicesq = goadservicesq || [];
+goadservicesq.push(
+  [ '_ENTRY' ]
+);
+(function() {
+      var goadservices = document.createElement('script');
+      goadservices.type = 'text/javascript';
+      goadservices.async = true;
+      goadservices.src = '//t.goadservices.com/engine/666b5297-21b9-499d-a058-0918bb9674d4';
+
+      var id_s = document.cookie.indexOf('__goadservices=');
+      if (id_s != -1) {
+        id_s += 15;
+        var id_e = document.cookie.indexOf(';', id_s);
+        if (id_e == -1) {
+          id_e = document.cookie.length;
+        }
+        goadservices.src += '?id='+document.cookie.substring(id_s, id_e);
+      }
+
+      var s = document.getElementsByTagName('script')[0];
+      s.parentNode.insertBefore(goadservices, s);
+    })();
+} catch(e) {
+}

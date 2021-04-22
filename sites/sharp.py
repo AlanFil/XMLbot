@@ -1,22 +1,14 @@
-"""
-for i, ele in enumerate(desc):
-    print(f'{i}. {ele}')
-
-use: separate_by_tag(tag, txt)
-eg.: separate_by_tag('span', desc[i])
-"""
-
 import requests
 from scrapy import Selector
 from tqdm import tqdm
 
 from imgs_processing.ImgRefractor import prod_img
+from imgs_processing.save_images import save_images
 
 
 def description(sel):
     desc_raw = sel.xpath('//div[@id="tab-description"]//div[@class="et_pb_row"]/*')
 
-    # tqdm()
     desc = []
     short = []
     for i in range(len(desc_raw)):
@@ -67,16 +59,7 @@ def product_imgs(link, product_folder_name_in, ean):
     for img in sel.xpath('//div[@id="sync1"]//a/@href').extract():
         imgs_links.append(img)
 
-    imgs_links = list(dict.fromkeys(imgs_links))  # remove duplicates
-
-    imgs_names = []
-    for i in tqdm(range(len(imgs_links))):
-        if i == 0:
-            file_type = prod_img(product_folder_name_in, imgs_links[i], f'{ean}-{i}-base', crop=False)
-            imgs_names.append(f'{ean}-{i}-base.{file_type}')
-        else:
-            file_type = prod_img(product_folder_name_in, imgs_links[i], f'{ean}-{i}', crop=False)
-            imgs_names.append(f'{ean}-{i}.{file_type}')
+    imgs_names = save_images(imgs_links, product_folder_name_in, ean)
 
     return imgs_names
 
@@ -97,6 +80,3 @@ def sharp_manage(full_product):
     full_product['imgs'] = product_imgs(full_product['link'], full_product['product_folder_name_in'],
                                         full_product['sku'])
     full_product['forceSmallImg'] = True
-
-# full_product = {'descriptions': ['<p></p>', '', ''], 'name': 'Suszarka SHARP KD-HHH7S7GW2-PL', 'sku': '2021032904', 'weight': '1', 'status': '2', 'manufacturer': '249', 'url_key': 'Suszarka SHARP KD-HHH7S7GW2-PL', 'manufacturer_code': 'KDHHH7S7GW2PL', 'link_ceneo': '', 'pickup_store': '1', 'search_keywords': '', 'search_priority': '', 'price_negotiation_hide': '0', 'question_form_show': '0', 'price': '9999.99', 'tax_class_id': '0', 'rule': '131', 'supplier': '0', 'export_ceneo': '1', 'product_info_tabs_categories': '', 'imgs': [], 'link': 'https://sharphome.eu/pl/sharp/pranie/kd-hhh7s7gw2/', 'product_folder_name_in': 'Sharp - KDHHH7S7GW2PL', 'attribute_set_id': '4'}
-# link = full_product['link']

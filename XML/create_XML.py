@@ -22,6 +22,7 @@ def create_XML(root, full_product):
 
     imgs_el = xml.Element('images')
     params.append(imgs_el)
+
     for i, img in enumerate(full_product['imgs']):
         if i == 0:
             xml.SubElement(imgs_el, 'image').text = img

@@ -20,6 +20,7 @@ def set_rule_ID(rule):
         'AUTEL': '179',
         'BABYLISS': '151',
         'BEKO': '178',
+        'BESTWAY': '191',
         'Blaupunkt': '185',
         'BOSCH': '177',
         'CityBlitz': '158',
@@ -39,6 +40,7 @@ def set_rule_ID(rule):
         'HUAWEI': '128',
         'JAMICON': '135',
         'KARCHER': '57',
+        'KRYSIAK': '189',
         'LAPTOPY': '148',
         'LEGO': '154',
         'MAMIBOT': '142',
@@ -53,6 +55,7 @@ def set_rule_ID(rule):
         'Overmax': '165',
         'PHILIPS': '171',
         'SAM_AKC': '61',
+        'SAM_GUARD': '190',
         'SAM_KOMP': '118',
         'SAM_RTV': '69',
         'SAM_TAB': '54',
@@ -81,8 +84,7 @@ def set_rule_ID(rule):
         'ZACO': '182',
         'ZENDURE': '174',
         '_OUTLET': '79',
-        '__INNE': '183',
-        'KRYSIAK': '189'
+        '__INNE': '183'
     }
 
     try:

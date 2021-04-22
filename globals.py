@@ -3,6 +3,14 @@ import os
 STARTING_DIRECTORY = os.getcwd()
 
 
+def func_name(func):
+    def wrapper(*args, **kwargs):
+        print(f"INFO: {func.__name__} func was picked")
+        func(*args, **kwargs)
+
+    return wrapper
+
+
 def separate_by_tag(tag, txt):
     tag_s = f'<{tag}'
     tag_e = f'</{tag}>'
@@ -10,7 +18,6 @@ def separate_by_tag(tag, txt):
     repetition = 0
     separated_elements = []
     while txt.find(tag_s) != -1:
-        print(repetition)
         i = 0
         separated = txt[txt.find(tag_s) + i:txt.find(tag_e) + len(tag_e)]
         while not (separated.find(tag_s) == 0 and separated.count(tag_s) == 1):

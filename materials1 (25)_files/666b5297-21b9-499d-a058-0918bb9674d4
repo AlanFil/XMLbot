@@ -1,0 +1,840 @@
+var goadservicesq_parsed = goadservicesq_parsed || [];
+var goadservices = goadservices || {
+
+  config: {
+    url: 't.goadservices.com/v2/',
+    client: '666b5297-21b9-499d-a058-0918bb9674d4',
+    sync: {"other":{"http":["http:\/\/m.goadservices.com\/other\/?id=[GOADSERVICES-ID]"],"https":["https:\/\/m.goadservices.com\/other\/?id=[GOADSERVICES-ID]"],"type":"iframe"},"adformssp":{"http":["http:\/\/m.goadservices.com\/match\/adformssp?sync=1"],"https":["https:\/\/m.goadservices.com\/match\/adformssp?sync=1"]},"smart":{"http":["http:\/\/rtb-csync.smartadserver.com\/redir\/?partnerid=55&partneruserid=[GOADSERVICES-ID]&redirurl=%2F%2Fm.goadservices.com%2Fmatch%2Fsmart%3Fid%3D[GOADSERVICES-ID]%26pid%3DSMART_USER_ID"],"https":["https:\/\/rtb-csync.smartadserver.com\/redir\/?partnerid=55&partneruserid=[GOADSERVICES-ID]&redirurl=%2F%2Fm.goadservices.com%2Fmatch%2Fsmart%3Fid%3D[GOADSERVICES-ID]%26pid%3DSMART_USER_ID"]},"ibillboard":{"http":["http:\/\/bbnaut.ibillboard.com\/match\/GoPl?partneruid=[GOADSERVICES-ID]&cburl=%2F%2Fm.goadservices.com%2Fv2%2Fmatch%2Fibillboard%3Fid%3D[GOADSERVICES-ID]%26pid%3DIBB_USER_ID"],"https":["https:\/\/bbnaut.ibillboard.com\/match\/GoPl?partneruid=[GOADSERVICES-ID]&cburl=%2F%2Fm.goadservices.com%2Fv2%2Fmatch%2Fibillboard%3Fid%3D[GOADSERVICES-ID]%26pid%3DIBB_USER_ID"]},"netsprint":{"http":["\/\/rm.em.nscontext.eu\/?dspId=gopl&buyerId=[GOADSERVICES-ID]&redirect=http%3A%2F%2Fm.goadservices.com%2Fmatch%2Fnetsprint%3Fid%3D[GOADSERVICES-ID]%26pid%3D__sspUserId__"],"https":["\/\/rm.em.nscontext.eu\/?dspId=gopl&buyerId=[GOADSERVICES-ID]&redirect=https%3A%2F%2Fm.goadservices.com%2Fmatch%2Fnetsprint%3Fid%3D[GOADSERVICES-ID]%26pid%3D__sspUserId__"]}},
+    cookies: {
+      tracking: {
+        name: '__goadservices',
+        lifetime: 86400 * 1000 * 365 * 2,
+      },
+      optout: {
+        name: '__goadservices_optout',
+        lifetime: 86400 * 1000 * 365 * 2,
+      },
+      message: {
+        name: '__goadservices_message',
+        lifetime: 900 * 1000,
+      },
+      check: {
+        name: '__goadservices_check',
+        lifetime: 86400 * 1000,
+      },
+      test: {
+        name: '__goadservices_test',
+        lifetime: 60 * 1000,
+      },
+    },
+    pixel: {
+      regex: /(\[GOADSERVICES-ID\])/g,
+      regex_urlsafe: /(\[GOADSERVICES-ID-URLSAFE\])/g,
+    },
+    force_internal_encode: (typeof window.JSON == 'undefined' || JSON.stringify([]) != '[]')
+  },
+
+  state: {
+    disabled: false,
+    init: false,
+    init_rt: false,
+    id: '3-mSroyeuzI_XI9UN5mtWMD1l499uWyNu7v1QmsTHUGlA',
+    id_urlsafe: false,
+    fid: false,
+    message: true,
+    protocol: false,
+    url: false,
+    referrer: false,
+    language: false,
+    adblock: false,
+    callback: false
+  },
+
+  requestManager: {
+    queue: {},
+
+    add: function (url, load, callback) {
+      var core = goadservices.core;
+      var requestManager = goadservices.requestManager;
+      var request = requestManager.item;
+      var request_id = core.getTimestamp() + '-' + core.getRandom();
+      if (url.match(/\?/)) {
+        url += '&rid=' + request_id;
+      } else {
+        url += '?rid=' + request_id;
+      }
+      requestManager.queue[request_id] = new request(url, load, callback);
+      return requestManager.queue[request_id]
+    },
+
+    item: function (url, load, callback) {
+      var self = this;
+      this.url = url;
+      this.load_method = load;
+      this.callback = callback;
+      this.doc = document;
+      this.instance = false;
+      this.response = false;
+      this.status = 0;
+      this.timeout = false;
+      this.fallback = false;
+      this.setTimeout = function (length, count) {
+        self.timeout = {
+          count: count,
+          length: length,
+          object: false
+        }
+      };
+      this.load = function () {
+        if (typeof self.load_method === 'function') {
+          self.load_method(self.url, self.doc);
+          self.status = self.status < 1 ? 1 : self.status
+        }
+        if (self.timeout) {
+          self.timeout.object = setTimeout(function () {
+            if (!self.response) {
+              if (self.timeout.count > 0) {
+                self.timeout.count--;
+                self.status = 2;
+                self.load()
+              } else if (self.fallback && typeof self.fallback === 'function') {
+                self.response = true;
+                self.status = 4;
+                self.fallback()
+              }
+            }
+          }, self.timeout.length)
+        }
+      }
+    },
+
+    response: function (response_id, data) {
+      var queue = goadservices.requestManager.queue;
+      for (var request_id in queue) {
+        if (queue.hasOwnProperty(request_id) && request_id == response_id) {
+          var request = queue[request_id];
+          var callback = request.callback;
+          var instance = request.instance;
+          if (!request.response) {
+            if (typeof callback === 'function') {
+              request.response = true;
+              request.status = 3;
+              callback({
+                id: response_id,
+                timestamp: goadservices.core.extractTimestamp(response_id),
+                data: data,
+                instance: instance,
+              });
+            }
+          } else {}
+        }
+      }
+    },
+
+  },
+
+  core: {
+
+    sync: function(data) {
+      var state = goadservices.state;
+      var config = goadservices.config;
+      var core = goadservices.core;
+
+      var value = [
+        [ config.pixel.regex, state.id ],
+        [ config.pixel.regex_urlsafe, state.id_urlsafe ]
+      ];
+
+      if (typeof(data) == 'object') {
+        core._syncMultiple(data, value);
+      } else if (typeof (data) == 'string') {
+        if (data == 'ALL') {
+          core._syncMultiple(undefined, value);
+        }
+      }
+    },
+
+    _syncMultiple: function(keys, value) {
+      var u = 'undefined';
+      var core = goadservices.core;
+      var sync = goadservices.config.sync;
+      if (keys == u) {
+        for (var key in sync) {
+          core._syncOne(key, sync[key], value);
+        }
+      } else {
+        for (i = 0; i < keys.length; i++) {
+          if (sync.hasOwnProperty(keys[i])) {
+            core._syncOne(keys[i], sync[keys[i]], value);
+          }
+        }
+      }
+    },
+
+    _syncOne: function(key, data, value) {
+      var core = goadservices.core;
+      var state = goadservices.state;
+      var config = goadservices.config;
+      if (!data.hasOwnProperty(state.protocol)) {
+        return;
+      }
+      var type = data.type || 'img';
+      var srcs = data[state.protocol];
+      if (!(srcs instanceof Array)) {
+        srcs = [ srcs ];
+      }
+      var elements = [];
+      for (var s = 0; s < srcs.length; s++) {
+        var element = document.createElement(type);
+        element.id = 'goadservices-rtb-' + key + '-' + s;
+        var src = srcs[s];
+        if (value instanceof Array) {
+          for (var i = 0; i < value.length; i++) {
+            src = src.replace(value[i][0], escape(value[i][1]));
+          }
+          element.src = src;
+        } else {
+          element.src = src.replace(config.pixel.regex, escape(value));
+        }
+        element.width = 0;
+        element.height = 0;
+        element.style.cssText = 'display:none !important;width:0 !important;height:0 !important;';
+        document.body.appendChild(element);
+        elements.push(element);
+      }
+      if (elements.length > 0) {
+        setTimeout(
+          function() {
+            for (var i = 0; i < elements.length; i++) {
+              if (elements[i].tagName == 'IMG' && elements[i].complete === false) {
+                elements[i].src = 'data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAAEAAAABCAYAAAAfFcSJAAAADUlEQVR42mP8z8BQDwAEhQGAhKmMIQAAAABJRU5ErkJggg==';
+              }
+            }
+          }, 1000
+        );
+      }
+    },
+
+    getCookie: function (cookie) {
+      var config = goadservices.config;
+      cookie = config.cookies[cookie];
+      var regex = '(^|;) ?' + cookie.name + '=([^;]*)(;|$)';
+      var cookie = document.cookie.match(regex);
+      if (cookie) {
+        return cookie[2]
+      }
+      return null;
+    },
+
+    renderMessage: function (message)
+    {
+      var core = goadservices.core;
+      var state = goadservices.state;
+
+      if (message) {
+        if (typeof(message) == "string") {
+          message = { 'html': message };
+        }
+        if (message.hasOwnProperty('css')) {
+          var head = document.getElementsByTagName('head')[0];
+           var s = document.createElement('style');
+           s.setAttribute('type', 'text/css');
+           if (s.styleSheet) {
+             s.styleSheet.cssText = message.css;
+           } else {
+             s.appendChild(document.createTextNode(message.css));
+           }
+           head.appendChild(s);
+        }
+        if (message.hasOwnProperty('html')) {
+          var body = document.getElementsByTagName('body')[0];
+          if (!state.messages) {
+            var container = document.createElement('div');
+            container.id = 'goadservices_messages';
+            container.style.cssText = 'position:fixed;bottom:0px;left:0px;right:0px;z-index:100000;';
+            state.messages = container;
+            body.appendChild(container);
+          }
+          state.messages.innerHTML += message.html;
+        }
+        if (message.hasOwnProperty('js')) {
+          try {
+            eval(message.js);
+          } catch (e) {};
+        }
+      }
+    },
+
+    hasCookies: function() {
+      var result = false;
+      var core = goadservices.core;
+      var value = core.getRandom();
+      core.setCookie('test', value);
+      if (core.getCookie('test') == value) {
+        result = true;
+      }
+      core.removeCookie('test');
+      return result;
+    },
+
+    setCookie: function (cookie, value) {
+      var config = goadservices.config;
+      var core = goadservices.core;
+      cookie = config.cookies[cookie];
+      if (cookie == undefined) {
+        return null;
+      }
+      if (value != undefined) {
+        var futdate = new Date();
+        var expdate = futdate.getTime();
+        var domain = core.getDomain();
+        expdate += cookie.lifetime;
+        futdate.setTime(expdate);
+        document.cookie = cookie.name + '=' + value + '; domain=' + domain + '; expires=' + futdate.toUTCString() + '; path=/; SameSite=None; Secure';
+        return value;
+      }
+      return null;
+    },
+
+    removeCookie: function (cookie) {
+      var config = goadservices.config;
+      var core = goadservices.core;
+      cookie = config.cookies[cookie];
+      if (cookie == undefined) {
+        return null;
+      }
+      var domain = core.getDomain();
+      document.cookie = cookie.name + '=0; domain=' + domain + '; expires=Thu, 01 Jan 1970 00:00:01 GMT; path=/';
+      return null;
+    },
+
+    getProtocol: function () {
+      var protocol = null;
+      try {
+        if (top.location) {
+          protocol = ('https:' === top.location.protocol ? 'https' : 'http');
+        }
+      }
+      catch (e) {
+        protocol = 'https';
+      }
+      return protocol;
+    },
+
+    getDomain: function() {
+      var host = null;
+      var domain = null;
+      if (top.location) {
+        host = top.location.hostname;
+      }
+      if (host) {
+        host = host.split('.').reverse();
+        if (host.length > 2 && host[1].length <= 3 && host[0].length <= 2) {
+          domain = '.' + host[2] + '.' + host[1] + '.' + host[0]
+        } else {
+          domain = '.' + host[1] + '.' + host[0]
+        }
+      }
+      return domain;
+    },
+
+    getUrl: function() {
+      var url = false;
+      try {
+        if (top.location && top.location.href != '') {
+          url = top.location.href;
+        }
+      } catch (e) {}
+      return url;
+    },
+
+    serializeParams: function (params) {
+      var core = goadservices.core;
+      var pairs = [];
+      for (var prop in params) {
+          if (!params.hasOwnProperty(prop)) {
+              continue;
+          }
+          if (Object.prototype.toString.call(params[prop]) == '[object Object]') {
+              pairs.push(core.serializeParams(params[prop]));
+              continue;
+          }
+          pairs.push(prop + '=' + (params[prop] ? encodeURIComponent(params[prop]): ''));
+      }
+      return pairs.join('&');
+    },
+
+    renderUrl: function(url, params) {
+      var core = goadservices.core;
+      var params = core.serializeParams(params);
+      if (url.match(/\?/)) {
+        url += '&' + params;
+      } else {
+        url += '?' + params;
+      }
+      return url;
+    },
+
+    getTimestamp: function() {
+      return new Date().getTime();
+    },
+
+    extractTimestamp: function(request_id) {
+      var timestamp = null;
+      var idx = request_id.indexOf('-');
+      if (idx > 0) {
+        timestamp = request_id.substr(0, idx);
+      }
+      return timestamp;
+    },
+
+    getRandom: function() {
+      return Math.floor(999999 * Math.random());
+    },
+
+    getReferrer: function() {
+      var referrer = null;
+      try {
+        if (top.document.referrer != '') {
+          referrer = top.document.referrer;
+        }
+      } catch (e) {}
+      return referrer;
+    },
+
+    getAdblock: function() {
+      result = 0;
+      if (document.body != undefined) {
+        var body = document.getElementsByTagName('body')[0];
+        var testdiv = document.createElement('div');
+        testdiv.id = 'bottomad';
+        testdiv.innerHTML = '<br/>';
+        body.appendChild(testdiv);
+        var result = (testdiv.offsetHeight)?0:1;
+        body.removeChild(testdiv);
+      }
+      return result;
+    },
+
+    getLanguage: function () {
+      var language = false;
+      try {
+        language = navigator.userLanguage || navigator.language;
+      } catch (e) {}
+      return language;
+    },
+
+    encode: function (obj) {
+      var config = goadservices.config;
+      var value = null;
+      try {
+        if (config.force_internal_encode) {
+          value = goadservices.core._encode(obj);
+        } else {
+          value = JSON.stringify(obj);
+        }
+      } catch (e) {}
+      return value;
+    },
+
+    _encode: function (obj) {
+      var t = typeof (obj);
+      if (t != 'object' || obj === null) {
+        if (t == 'string') {
+          obj = '"' + obj + '"'
+        }
+        return String(obj)
+      } else {
+        var n;
+        var v;
+        var json = [];
+        var arr = (obj && obj.constructor == Array);
+        for (n in obj) {
+          if (obj.hasOwnProperty(n)) {
+            v = obj[n];
+            t = typeof (v);
+            if (t == 'string') {
+              v = '"' + v + '"'
+            } else if (t == 'object' && v !== null) {
+              v = goadservices.core._encode(v)
+            }
+            json.push((arr ? '' : '"' + n + '":') + String(v))
+          }
+        }
+        return (arr ? '[' : '{') + String(json) + (arr ? ']' : '}')
+      }
+    },
+
+    decode: function (value) {
+      var obj = null;
+      try {
+        if (typeof window.JSON == 'undefined') {
+          obj = goadservices.core._decode(value);
+        } else {
+          obj = JSON.parse(value);
+        }
+      } catch (e) {}
+      return obj;
+    },
+
+    _decode: function (value) {
+      if (value === '') {
+        value = '""'
+      }
+      var obj = eval('(' + value + ')');
+      return obj;
+    },
+
+    isEmpty: function (obj) {
+      for (var prop in obj) {
+        if (obj.hasOwnProperty(prop)) {
+          return false;
+        }
+      }
+      return true;
+    },
+
+    load: function (url, doc) {
+      var scripts = doc.getElementsByTagName('script');
+      var last = scripts[scripts.length - 1];
+      var s = doc.createElement('script');
+      s.type = 'text/javascript';
+      s.async = true;
+      s.src = url;
+      last.parentNode.insertBefore(s, last.nextSibling)
+    },
+  },
+
+  request: function (url, params) {
+    var state = goadservices.state;
+    var core = goadservices.core;
+    var requestManager = goadservices.requestManager;
+
+    if (state.id) {
+      params.id = state.id;
+    }
+
+    if (state.fid) {
+      params.fid = state.fid;
+    }
+
+    url = core.renderUrl(url, params);
+
+    var request = requestManager.add(url, core.load, goadservices.response);
+    request.load()
+  },
+
+  response: function (response) {
+    var core = goadservices.core;
+    var state = goadservices.state;
+    var config = goadservices.config;
+
+    var data = response.data;
+    data = core.decode(data);
+
+    if (data.hasOwnProperty("client") && (data.client != '666b5297-21b9-499d-a058-0918bb9674d4')) {
+      return;
+    }
+
+    data.timestamp = response.timestamp;
+
+    if (!core.isEmpty(data)) {
+
+      if (data.hasOwnProperty('id')) {
+        state.id = core.setCookie('tracking', data.id);
+        if (data.hasOwnProperty('id_urlsafe')) {
+          state.id_urlsafe = data.id_urlsafe;
+        }
+      }
+
+      if (data.hasOwnProperty('sync')) {
+        core.sync(data.sync);
+      }
+
+      if (data.hasOwnProperty('check')) {
+        var params = {};
+        goadservices.request_check(params);
+      }
+
+      var method = 'response_' + data.type;
+      if (typeof(goadservices[method]) === "function") {
+        return goadservices[method](data);
+      }
+    }
+  },
+
+  request_tag: function (params)
+  {
+    var config = goadservices.config;
+    var state = goadservices.state;
+
+    var url = config.url + 'tag/' + (params.client || config.client);
+    delete params.client;
+
+    params.url = state.url;
+    if (state.referrer) {
+      params.ref = state.referrer;
+    }
+    if (state.lang) {
+      params.lang = state.language;
+    }
+    if (state.adblock) {
+      params.adblock = state.adblock;
+    }
+
+    goadservices.request(url, params);
+  },
+
+  response_tag: function (data) {
+    var core = goadservices.core;
+    var state = goadservices.state;
+    var config = goadservices.config;
+
+    if (data.hasOwnProperty('message') && state.message) {
+      var params = {};
+      goadservices.request_message(params);
+    }
+  },
+
+  request_message: function (params)
+  {
+    var config = goadservices.config;
+    var url = config.url + 'message/' + config.client;
+    goadservices.request(url, params);
+  },
+
+  response_message: function (data) {
+    var core = goadservices.core;
+    var state = goadservices.state;
+    var config = goadservices.config;
+
+    if (data.hasOwnProperty('message')) {
+      core.renderMessage(data.message);
+    }
+  },
+
+  request_check: function (params)
+  {
+    var config = goadservices.config;
+    var url = config.url + 'check/' + config.client;
+    goadservices.request(url, params);
+  },
+
+  response_check: function (data) {
+
+    if (
+      true ||
+      data.result ||
+      !data.timestamp ||
+      (data.timestamp + 1000 < goadservices.core.getTimestamp()) ||
+      goadservices.state.protocol == 'https' ||
+      goadservices.core.getCookie('check') > 0
+    ) {
+      return;
+    }
+
+    if (window.top !== window.self) {
+      return;
+    }
+
+    findAnchor = function(ev) {
+      return "a" === ev.localName ? ev : ev.parentElement ? findAnchor(ev.parentElement) : null;
+    };
+
+    rewriteUrl = function(url) {
+      return goadservices.config.url + 'redirect?id=' + goadservices.state.id + '&fid=' + goadservices.state.fid + '&rb=' + btoa(unescape(encodeURIComponent(url)));
+    };
+
+    top.addEventListener("click", function (ev) {
+      if (
+        (goadservices.core.getCookie('check') < 1) &&
+        !ev.cancelBubble &&  !ev.defaultPrevented
+      ) {
+        var a = findAnchor(ev.target);
+        if (a && a.protocol !== 'https:') {
+          var url = a.toString();
+          a.href = rewriteUrl(url);
+          setTimeout(function() {
+            a.href = url;
+          }, 0);
+          goadservices.core.setCookie('check', '1');
+        }
+      }
+    });
+
+    if (goadservices.core.getCookie('check') === null) {
+      goadservices.core.renderMessage({
+        'html': '<div class="goadservices_message_check"> <style>.goadservices_message_check{background: #000; text-overflow: ellipsis; border-collapse: collapse; bottom: 0; left: 0; right: 0; min-height: 38px;}.goadservices_message_check *{font-size: 11px; font-family: Verdana, Arial, Helvetica, sans-serif !important; color: #e6e6e6; line-height: normal !important; margin: 0; padding: 0;}.goadservices_message_check p{padding: 10px 10px 10px 38px; text-align: left;}.goadservices_message_check a:link, .goadservices_message_check a:hover, .goadservices_message_check a:visited, .goadservices_message_check a:active{color: #e6e6e6; text-decoration: underline; font-weight: 700;}.goadservices_message_check{opacity: 0.9;}@media only screen and (min-device-width: 768px) and (max-device-width: 1024px){.goadservices_message_check{}}</style> <p>Twoja przeglądarka blokuje automatycznie niektóre ciasteczka. Klikając na jakikolwiek link na tej stronie zezwalasz naszemu partnerowi GO.PL na umieszczenie jego ciasteczek i wyświetlanie spersonalizowanych reklam. Możesz dowiedzieć się więcej lub zablokować reklamy GO.PL, <a href="http://go.pl/polityka-prywatnosci.html" target="_blank">kliknij tutaj</a>.</p></div>'
+      });
+      goadservices.core.setCookie('check', '0')
+    }
+  },
+
+  init: function() {
+    if (
+      goadservices.state.init ||
+      goadservices.state.disabled
+    ) {
+      return;
+    }
+
+    var core = goadservices.core;
+    var state = goadservices.state;
+    var config = goadservices.config;
+
+    
+
+    if (!state.id) {
+      if (!core.hasCookies()) {
+        state.disabled = true;
+        return;
+      }
+    }
+
+    var state_id_suggested = core.getCookie('tracking');
+    if (state_id_suggested) {
+      state.id = state_id_suggested;
+    }
+    state.url = core.getUrl();
+    state.protocol = core.getProtocol() || 'https';
+    config.url = state.protocol + '://' + config.url;
+    state.referrer = core.getReferrer();
+    state.language = core.getLanguage();
+    state.adblock = core.getAdblock();
+    var state_message_suggested = core.getCookie('message');
+    if (state_message_suggested == '0') {
+      state.message = false;
+    }
+
+    goadservices.state.init = true;
+
+    if (window.top !== window.self) {
+      return;
+    }
+
+    if (core.getCookie('check') == '1') {
+      core.setCookie('check', '2');
+      goadservices.core.renderMessage({
+        'html': '<div class="goadservices_message_check"> <style>.goadservices_message_check{background: #000; text-overflow: ellipsis; border-collapse: collapse; bottom: 0; left: 0; right: 0; min-height: 38px;}.goadservices_message_check *{font-size: 11px; font-family: Verdana, Arial, Helvetica, sans-serif !important; color: #e6e6e6; line-height: normal !important; margin: 0; padding: 0;}.goadservices_message_check p{padding: 10px 10px 10px 38px; text-align: left;}.goadservices_message_check a:link, .goadservices_message_check a:hover, .goadservices_message_check a:visited, .goadservices_message_check a:active{color: #e6e6e6; text-decoration: underline; font-weight: 700;}.goadservices_message_check{opacity: 0.9;}@media only screen and (min-device-width: 768px) and (max-device-width: 1024px){.goadservices_message_check{}}</style> <p>Dziękujemy za wyrażenie zgody na zapisywanie ciasteczek GO.PL. Aby uzyskać więcej informacji lub zmienić to ustawienie, <a href="http://go.pl/polityka-prywatnosci.html" target="_blank">kliknij tutaj</a>.</p></div>'
+      });
+    }
+
+  },
+
+  ready: function (a) {
+    function m(a) {
+      l = 1;
+      while (a = b.shift()) a()
+    }
+    var b = [],
+        c, d = !1,
+        e = document,
+        f = e.documentElement,
+        g = f.doScroll,
+        h = "DOMContentLoaded",
+        i = "addEventListener",
+        j = "onreadystatechange",
+        k = "readyState",
+        l = /^loade|c/.test(e[k]);
+    return e[i] && e[i](h, c = function () {
+      e.removeEventListener(h, c, d), m()
+    }, d), g && e.attachEvent(j, c = function () {
+      /^c/.test(e[k]) && (e.detachEvent(j, c), m())
+    }), a = g ? function (c) {
+      self != top ? l ? c() : b.push(c) : function () {
+        try {
+          f.doScroll("left")
+        } catch (b) {
+          return setTimeout(function () {
+            a(c)
+          }, 50)
+        }
+        c()
+      }()
+    } : function (a) {
+      l ? a() : b.push(a)
+    }
+  }(),
+
+  trace: function(e)
+  {
+    try {
+      var config = goadservices.config;
+      var state = goadservices.state;
+      var body = document.getElementsByTagName('body')[0];
+      var img = document.createElement('img');
+      var url = 'https://' + config.url + 'trace/' + config.client + '?name=' + e.name + '&message=' + e.message;
+      img.src = url;
+      body.appendChild(img);
+    } catch (e) {};
+  },
+
+  run: function() {
+    var u = 'undefined';
+    var core = goadservices.core;
+    var state = goadservices.state;
+    var config = goadservices.config;
+
+    goadservices.init();
+
+    if (!state.init) {
+      return;
+    }
+
+      if (!goadservices.state.callback) {
+    goadservices.state.callback = true;
+    try {
+        var onet = document.createElement('img');
+  onet.src = 'https://csr.onet.pl/_s/c/?id=gopl03';
+    } catch (e) {}
+  }
+
+    if (goadservicesq != u && typeof(goadservicesq) == 'object' && goadservicesq.length > 0) {
+
+      var goadservicesq_per_client = {
+        '666b5297-21b9-499d-a058-0918bb9674d4': []
+      }
+
+      while (goadservicesq.length > 0) {
+        var clients = ['666b5297-21b9-499d-a058-0918bb9674d4'];
+        var temp = goadservicesq.pop();
+        if (typeof temp[0] == 'object' && temp[0].hasOwnProperty('client')) {
+          var clients = temp[0].client;
+          if (!(clients instanceof Array)) {
+            clients = [ clients ];
+          }
+          temp[0] = temp[0].tag;
+        }
+        for (var i = 0; i < clients.length; i++) {
+          var client = clients[i];
+          if (!goadservicesq_per_client.hasOwnProperty(client)) {
+            goadservicesq_per_client[client] = [];
+          }
+          goadservicesq_per_client[client].push(temp);
+        }
+        goadservicesq_parsed.push(temp);
+      }
+
+      for (var client in goadservicesq_per_client) {
+        var params = {
+          'client': client,
+          'data': core.encode(goadservicesq_per_client[client])
+        };
+
+        goadservices.request_tag(params);
+      }
+
+      
+
+    } else {
+    }
+  },
+
+};
+
+try {
+  goadservices.ready(goadservices.run);
+} catch (e) {
+  
+  goadservices.trace(e);
+}

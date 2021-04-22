@@ -1,19 +1,11 @@
-""" myPhone
-
-for i, ele in enumerate(desc):
-    print(f'{i}. {ele}')
-
-use: separate_by_tag(tag, txt)
-eg.: separate_by_tag('span', desc[i])
-"""
 from time import sleep
 
 import requests
 from scrapy import Selector
 from selenium import webdriver
-from tqdm import tqdm
 
-from imgs_processing.ImgRefractor import prod_img
+from globals import func_name
+from imgs_processing.save_images import save_images
 
 
 def rreplace(s, old, new, occurrence):
@@ -113,16 +105,7 @@ def product_imgs(link, product_folder_name_in, ean):
     links = [link.get_attribute('src') for link in links]
     driver.close()
 
-    links = list(dict.fromkeys(links))  # remove duplicates
-
-    imgs_names = []
-    for i in tqdm(range(len(links))):
-        if i == 0:
-            file_type = prod_img(product_folder_name_in, links[i], f'{ean}-{i}-base', crop=False)
-            imgs_names.append(f'{ean}-{i}-base.{file_type}')
-        else:
-            file_type = prod_img(product_folder_name_in, links[i], f'{ean}-{i}', crop=False)
-            imgs_names.append(f'{ean}-{i}.{file_type}')
+    imgs_names = save_images(links, product_folder_name_in, ean)
 
     return imgs_names
 
@@ -137,11 +120,10 @@ def mptech_descriptions(link):
     return [desc, short, tech]
 
 
+@func_name
 def mptech_manage(full_product):
     full_product['manufacturer'] = '286' if 'hammer' in full_product['name'].lower() else '285'
     full_product['pickup_store'] = '1'
     full_product['descriptions'] = mptech_descriptions(full_product['link'])
     full_product['imgs'] = product_imgs(full_product['link'], full_product['product_folder_name_in'],
                                         full_product['sku'])
-# full_product = {'descriptions': ['<p></p>', '', ''], 'name': 'Telefon HAMMER 3 srebrny', 'sku': '5902983600466', 'weight': '1', 'status': '2', 'manufacturer': '0', 'url_key': 'Telefon HAMMER 3 srebrny', 'manufacturer_code': 'HAMMER3S', 'link_ceneo': '', 'pickup_store': '', 'search_keywords': '', 'search_priority': '', 'price_negotiation_hide': '0', 'question_form_show': '0', 'price': '9999.99', 'tax_class_id': '0', 'rule': '188', 'supplier': '27', 'export_ceneo': '1', 'product_info_tabs_categories': '', 'imgs': [], 'link': 'https://sklep.mptech.eu/HAMMER_3.html', 'product_folder_name_in': 'myPhone - HAMMER3S', 'attribute_set_id': '4'}
-# link = full_product['link']
