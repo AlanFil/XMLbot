@@ -3,12 +3,14 @@ import os
 from globals import STARTING_DIRECTORY
 from sites.ab import ab_manage
 from sites.blaupunkt import blaupunkt_manage
+from sites.bosch import bosch_manage
 from sites.cqe import cqe_manage
 from sites.garett import garett_manage
 from sites.graef import graef_manage
 from sites.krysiak import krysiak_manage
 from sites.mptech import mptech_manage
 from sites.rcpro import dji_manage
+from sites.rtveuroagd import rtveuroagd_manage
 from sites.samsung import samsung_manage
 from sites.scentre import scentre_manage
 from sites.sharp import sharp_manage
@@ -93,6 +95,11 @@ def collect_data_from_sites(full_product):
         full_product['product_folder_name_in'] = 'AB' + full_product['product_folder_name_in']
         create_product_folder(full_product['product_folder_name_in'])
         ab_manage(full_product)
+
+    elif 'bosch' in full_product['link'].lower():
+        full_product['product_folder_name_in'] = 'Bosch' + full_product['product_folder_name_in']
+        create_product_folder(full_product['product_folder_name_in'])
+        bosch_manage(full_product)
 
     else:
         print('WARNING: There was no scrapping function found')
