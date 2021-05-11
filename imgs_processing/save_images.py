@@ -10,6 +10,9 @@ def save_images(imgs_links, product_folder_name_in, ean):
     imgs_names = []
     print("INFO: Downloading product images...")
     for i in tqdm(range(len(imgs_links))):
+        if i > 11:
+            break
+
         if imgs_links[i].strip() == '' or '.gif' in imgs_links[i]:
             continue
 

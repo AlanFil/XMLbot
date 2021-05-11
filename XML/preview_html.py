@@ -3,6 +3,8 @@ from time import sleep
 
 import keyboard
 
+from globals import timeit
+
 
 def add_mm_css(full_product):
     html = """<html lang="pl" id="top" class=" js no-touch localstorage no-ios js no-touch localstorage no-ios js no-touch localstorage no-ios js no-touch localstorage no-ios js no-touch localstorage no-ios" style=""><head><meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
@@ -1039,23 +1041,18 @@ Udostępnij na Facebooku            </a>
 </div>
 
 <div class="more-views">
-<ul class="product-image-thumbs slick-initialized slick-slider"><div aria-live="polite" class="slick-list draggable"><div class="slick-track" role="listbox" style="opacity: 1; width: 388px; left: 0px;"><div class="slick-slide slick-current slick-active" data-slick-index="0" aria-hidden="false" tabindex="-1" role="option" aria-describedby="slick-slide00" style="width: 97px;"><div><li style="width: 100%; display: inline-block;">
-<a class="thumb-link" href="https://matrixmedia.pl/telewizor-sony-kd-77ag9.html#" title="" data-image-index="0" tabindex="0">
-<img src="./materials1 (25)_files/ag91_1_1(2).jpg" alt="">
-</a>
-</li></div></div><div class="slick-slide slick-active" data-slick-index="1" aria-hidden="false" tabindex="-1" role="option" aria-describedby="slick-slide01" style="width: 97px;"><div><li style="width: 100%; display: inline-block;">
-<a class="thumb-link" href="https://matrixmedia.pl/telewizor-sony-kd-77ag9.html#" title="" data-image-index="1" tabindex="0">
-<img src="./materials1 (25)_files/ag93_1_1(1).jpg" alt="">
-</a>
-</li></div></div><div class="slick-slide slick-active" data-slick-index="2" aria-hidden="false" tabindex="-1" role="option" aria-describedby="slick-slide02" style="width: 97px;"><div><li style="width: 100%; display: inline-block;">
-<a class="thumb-link" href="https://matrixmedia.pl/telewizor-sony-kd-77ag9.html#" title="" data-image-index="2" tabindex="0">
-<img src="./materials1 (25)_files/ag92_1_1(1).jpg" alt="">
-</a>
-</li></div></div><div class="slick-slide slick-active" data-slick-index="3" aria-hidden="false" tabindex="-1" role="option" aria-describedby="slick-slide03" style="width: 97px;"><div><li style="width: 100%; display: inline-block;">
-<a class="thumb-link" href="https://matrixmedia.pl/telewizor-sony-kd-77ag9.html#" title="" data-image-index="3" tabindex="0">
-<img src="./materials1 (25)_files/ag94_1_1(1).jpg" alt="">
-</a>
-</li></div></div></div></div></ul>
+<ul class="product-image-thumbs slick-initialized slick-slider"><div aria-live="polite" class="slick-list draggable"><div class="slick-track" role="listbox" style="opacity: 1; width: 388px; left: 0px;">
+
+""" + f"""
+    <div class="slick-slide slick-current slick-active" data-slick-index="0" aria-hidden="false" tabindex="-1" role="option" aria-describedby="slick-slide00" style="width: 97px;">
+    <div><li style="width: 100%; display: inline-block;">
+    <a class="thumb-link" href="https://matrixmedia.pl/telewizor-sony-kd-77ag9.html#" title="" data-image-index="0" tabindex="0">
+    <img src="./bin/{full_product['product_folder_name_in']}/product_imgs/{full_product['imgs'][0]}"></a>
+    </li></div></div>
+    """ + ''.join([f"""<div class="slick-slide slick-active" data-slick-index="{i}" aria-hidden="false" tabindex="-1" role="option" aria-describedby="slick-slide01" style="width: 97px;"><div><li style="width: 100%; display: inline-block;"><a class="thumb-link" href="https://matrixmedia.pl/telewizor-sony-kd-77ag9.html#" title="" data-image-index="1" tabindex="0"><img src="./bin/{full_product['product_folder_name_in']}/product_imgs/{full_product['imgs'][i]}"></a></li></div></div>
+    """ for i in range(1, len(full_product['imgs']))]) + """
+
+</div></div></ul>
 </div>
 
 <div class="sticker-container-bottom-left stickers">
@@ -2119,6 +2116,7 @@ window.open('https://leaselink.azurewebsites.net/RateCalculator/calculate?tax=23
     return html
 
 
+@timeit
 def preview_html(full_product, ean, yes_to_all):
     while 'src="//' in full_product['descriptions'][0]:
         full_product['descriptions'][0] = full_product['descriptions'][0].replace('src="//', 'src="https://')

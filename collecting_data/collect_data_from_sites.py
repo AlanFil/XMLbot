@@ -1,6 +1,6 @@
 import os
 
-from globals import STARTING_DIRECTORY
+from globals import STARTING_DIRECTORY, timeit
 from sites.ab import ab_manage
 from sites.blaupunkt import blaupunkt_manage
 from sites.bosch import bosch_manage
@@ -9,12 +9,11 @@ from sites.garett import garett_manage
 from sites.graef import graef_manage
 from sites.krysiak import krysiak_manage
 from sites.mptech import mptech_manage
+from sites.philips_hue import philips_hue_manage
 from sites.rcpro import dji_manage
-from sites.rtveuroagd import rtveuroagd_manage
 from sites.samsung import samsung_manage
 from sites.scentre import scentre_manage
 from sites.sharp import sharp_manage
-from sites.philips_hue import philips_hue_manage
 from sites.sklepasus import sklepasus_manage
 
 
@@ -30,6 +29,7 @@ def create_product_folder(product_folder_name):
         # return -1
 
 
+@timeit
 def collect_data_from_sites(full_product):
     if 'samsung.com' in full_product['link'].lower():
         full_product['product_folder_name_in'] = 'Samsung' + full_product['product_folder_name_in']
@@ -92,7 +92,7 @@ def collect_data_from_sites(full_product):
         garett_manage(full_product)
 
     elif '2' in full_product['supplier'] and full_product['link'].strip() == '':  # AB
-        full_product['product_folder_name_in'] = 'AB' + full_product['product_folder_name_in']
+        full_product['product_folder_name_in'] = 'Bosch' + full_product['product_folder_name_in']
         create_product_folder(full_product['product_folder_name_in'])
         ab_manage(full_product)
 

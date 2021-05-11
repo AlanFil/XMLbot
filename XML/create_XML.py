@@ -4,7 +4,10 @@ adding element with attribute "base" equal to "True":
 """
 import xml.etree.ElementTree as xml
 
+from globals import timeit
 
+
+@timeit
 def create_XML(root, full_product):
     params = xml.Element('Product')
     root.append(params)

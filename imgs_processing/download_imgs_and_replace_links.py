@@ -2,9 +2,11 @@ import re
 
 from tqdm import tqdm
 
+from globals import timeit
 from imgs_processing.ImgRefractor import desc_img
 
 
+@timeit
 def download_imgs_and_replace_links(full_product):
     links = re.findall('src=".*?"', full_product['descriptions'][0])
 

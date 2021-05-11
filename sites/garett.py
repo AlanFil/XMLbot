@@ -6,9 +6,9 @@ use: separate_by_tag(tag, txt)
 eg.: separate_by_tag('span', desc[i])
 """
 import re
+
 import requests
 from scrapy import Selector
-
 
 from globals import func_name
 from imgs_processing.save_images import save_images
@@ -119,15 +119,3 @@ def garett_manage(full_product):
     full_product['descriptions'] = garett_descriptions(full_product['link'])
     full_product['imgs'] = product_imgs(full_product['link'], full_product['product_folder_name_in'],
                                         full_product['sku'])
-
-
-full_product = {'descriptions': ['<p></p>', '', ''], 'name': 'Lampa do wybielania zębów Garett Beauty Smile Charge',
-                'sku': '5903246289473', 'weight': '1', 'status': '2', 'manufacturer': '196',
-                'url_key': 'Lampa do wybielania zębów Garett Beauty Smile Charge', 'manufacturer_code': 'GARETT1',
-                'link_ceneo': '', 'pickup_store': '1', 'search_keywords': '', 'search_priority': '',
-                'price_negotiation_hide': '0', 'question_form_show': '0', 'price': '9999.99', 'tax_class_id': '0',
-                'rule': '66', 'supplier': '4', 'export_ceneo': '1', 'product_info_tabs_categories': '', 'imgs': [],
-                'link': 'https://garett.com.pl/nasza-oferta/smartwatche/damskie/smartwatch-garett-women-eva-rozowy-stalowy',
-                'product_folder_name_in': 'GARETT - GARETT1', 'attribute_set_id': '4', 'forceSmallImg': False}
-link = full_product['link']
-sel = Selector(text=requests.get(link).content)

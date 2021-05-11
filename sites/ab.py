@@ -1,4 +1,5 @@
 from selenium import webdriver
+from selenium.common.exceptions import NoSuchElementException
 from selenium.webdriver.common.keys import Keys
 
 from globals import func_name
@@ -6,7 +7,10 @@ from imgs_processing.save_images import save_images
 
 
 def description(driver):
-    desc = driver.find_element_by_xpath('//div[@class="desc"]//div[@class="prmDesc"]').get_attribute('innerHTML')
+    try:
+        desc = driver.find_element_by_xpath('//div[@class="desc"]//div[@class="prmDesc"]').get_attribute('innerHTML')
+    except NoSuchElementException:
+        desc = ''
 
     return '<div class="product-description-section">' + ''.join(desc) + '</div>'
 

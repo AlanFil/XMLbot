@@ -1,4 +1,5 @@
 from collecting_data.set_attribute_set_ID import set_attribute_set_ID
+from globals import timeit
 
 
 def set_rule_ID(rule):
@@ -137,6 +138,7 @@ def set_supplier_ID(supplier):
     return supplier_ID
 
 
+@timeit
 def collect_data_oyo(product):
     """program rule and supplier ID given below"""
 

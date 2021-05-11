@@ -1,8 +1,6 @@
 import requests
 from scrapy import Selector
-from tqdm import tqdm
 
-from imgs_processing.ImgRefractor import prod_img
 from imgs_processing.save_images import save_images
 
 
