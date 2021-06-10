@@ -11,7 +11,7 @@ import requests
 from scrapy import Selector
 
 from globals import func_name
-from imgs_processing.save_images import save_images
+from imgs_processing.SaveImages import SaveImages
 
 
 def description(sel):
@@ -98,7 +98,7 @@ def product_imgs(link, product_folder_name_in, ean):
     for img in imgs_links:
         img = 'https://garett.com.pl' + img if not img.startswith('https://garett.com.pl') else img
 
-    imgs_names = save_images(imgs_links, product_folder_name_in, ean)
+    imgs_names = SaveImages(imgs_links, product_folder_name_in, ean)
 
     return imgs_names
 
@@ -113,7 +113,7 @@ def garett_descriptions(link):
 
 
 @func_name
-def garett_manage(full_product):
+def GarettManage(full_product):
     full_product['manufacturer'] = '196'
     full_product['pickup_store'] = '1'
     full_product['descriptions'] = garett_descriptions(full_product['link'])

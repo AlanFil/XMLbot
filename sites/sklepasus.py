@@ -2,7 +2,7 @@ import requests
 from scrapy import Selector
 
 from globals import join_strip
-from imgs_processing.save_images import save_images
+from imgs_processing.SaveImages import SaveImages
 
 
 def description(sel):
@@ -48,7 +48,7 @@ def product_imgs(link, product_folder_name_in, ean):
     imgs_links = [img for img in sel.xpath('//div[contains(@id, "offerGallery")]//img[@class="m-offerGallery_picture"]/@data-zoom-image').extract()]
     imgs_links = ['https://sklepasus.pl' + img for img in imgs_links if not img.startswith('https://sklepasus.pl')]
 
-    imgs_names = save_images(imgs_links, product_folder_name_in, ean)
+    imgs_names = SaveImages(imgs_links, product_folder_name_in, ean)
 
     return imgs_names
 
@@ -63,7 +63,7 @@ def sklepasus_descriptions(link):
     return [desc, short, tech]
 
 
-def sklepasus_manage(full_product):
+def SklepAsusManage(full_product):
     full_product['manufacturer'] = '5878'
     full_product['pickup_store'] = '1'
     full_product['descriptions'] = sklepasus_descriptions(full_product['link'])

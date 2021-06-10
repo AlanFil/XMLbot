@@ -4,23 +4,49 @@ import requests
 from scrapy import Selector
 
 from globals import func_name
-from imgs_processing.save_images import save_images
+from imgs_processing.SaveImages import SaveImages
 
 
 def description(sel):
     benefit = sel.xpath('//*[@id="benefit"]/*').extract()
+    sound_quality = sel.xpath('//*[@id="SoundQuality"][1]/*').extract()
     benefit = [ele.replace('\n', '').replace('\t', '') for ele in benefit if not ele.startswith('<input')]
+    sound_quality = [ele.replace('\n', '').replace('\t', '') for ele in sound_quality if not ele.startswith('<input')]
+
+    benefit.extend(sound_quality)
+
+    benefit = list(dict.fromkeys(benefit))  # remove duplicates
 
     for i in range(len(benefit)):
         direction = 'right' if i % 2 == 0 else 'left'
         size = 'big'
+
         if 'class="product-summary__list-item"' in benefit[i]:
-            # should implement description element of 3 elems in row here
-            benefit[i] = ''
-            continue
+            benefit[i] = benefit[i].replace(re.search('<h3.*?</h3>', benefit[i]).group(), '')
+            benefit[i] = benefit[i].replace(re.search('<div class="product-summary.*?>', benefit[i]).group(), '<div class="three-in-row flex--row">')
+            benefit[i] = benefit[i].replace(re.search('<ul.*?>', benefit[i]).group(), '<ul>')
+            benefit[i] = benefit[i].replace(re.search('<li.*?>', benefit[i]).group(), '<li>')
+
+            benefit[i] = benefit[i].replace('class="pd-g-product-summary"', '')
+            benefit[i] = benefit[i].replace('class="product-summary__list-item-text"', '')
+
+            srcs = re.findall('data-desktop-src=".*?"', benefit[i])
+            imgs_htmls = re.findall('<img.*?>', benefit[i])
+
+            if len(srcs) == 3 and len(imgs_htmls) == 3:
+                for j in range(3):
+                    benefit[i] = benefit[i].replace(imgs_htmls[j], f'<img {srcs[j]}/>').replace('data-desktop-', '')
+            else:
+                benefit[i] = ''
+                continue
 
         if 'class="swiper-wrapper"' in benefit[i]:
             # should implement description element of slider here
+            benefit[i] = ''
+            continue
+
+        if 'feature-benefit-tab' in benefit[i]:
+
             benefit[i] = ''
             continue
 
@@ -56,13 +82,16 @@ def description(sel):
                     else benefit[i].replace(ele, '<div class="left-side">', 1)
 
         if re.findall(r'<div class="feature-benefit-half-text.*?</div>', benefit[i]):
-            benefit[i] = benefit[i].replace(re.search(r'<div class="feature-benefit-half-text.*?>', benefit[i]).group(), '<div class="two-col-asymmetrically">')
+            benefit[i] = benefit[i].replace(re.search(r'<div class="feature-benefit-half-text.*?>', benefit[i]).group(),
+                                            '<div class="two-col-asymmetrically">')
             benefit[i] = benefit[i].replace('feature-benefit-half-text__content', f'{direction}-side')
 
             links = re.findall(r'data-desktop-src=".*?"', benefit[i])
             link = links[-1].replace('data-desktop-', '')
 
-            benefit[i] = benefit[i].replace(re.search('<figure class="feature-benefit-half-text__figure">.*?</figure>', benefit[i]).group(), f'<img {link}/>')
+            benefit[i] = benefit[i].replace(
+                re.search('<figure class="feature-benefit-half-text__figure">.*?</figure>', benefit[i]).group(),
+                f'<img {link}/>')
 
         if re.findall(r'<div class="two-column.*?</div>', benefit[i]):
             benefit[i] = benefit[i].replace(re.search(r'<div class="two-column.*?>', benefit[i]).group(), '<div>')
@@ -72,7 +101,8 @@ def description(sel):
             links = re.findall(r'data-desktop-src=".*?"', benefit[i])
             link = links[-1].replace('data-desktop-', '')
 
-            benefit[i] = benefit[i].replace(re.search('<figure class="two-column__figure">.*?</figure>', benefit[i]).group(), f'<img {link}/>')
+            benefit[i] = benefit[i].replace(
+                re.search('<figure class="two-column__figure">.*?</figure>', benefit[i]).group(), f'<img {link}/>')
 
         for ele in re.findall(r'<h1.*?>', benefit[i]):
             benefit[i] = benefit[i].replace(ele, '<h1 class="important-header" style="text-align: center;">')
@@ -135,11 +165,15 @@ def tech_desc(sel):
 def product_imgs(link, product_folder_name_in, ean):
     sel = Selector(text=requests.get(link).content)
     imgs_links = []
+
+    if not sel.xpath('//div[contains(@class, "pd-header-gallery")]//img/@data-desktop-src').extract():
+        sel = Selector(text=requests.get(link + '/buy').content)
+
     for img in sel.xpath('//div[contains(@class, "pd-header-gallery")]//img/@data-desktop-src').extract():
         new_link = img.replace('//', 'https://').replace('$LazyLoad_Home', '').replace('$684_547', '')
         imgs_links.append(new_link)
 
-    imgs_names = save_images(imgs_links, product_folder_name_in, ean)
+    imgs_names = SaveImages(imgs_links, product_folder_name_in, ean)
 
     return imgs_names
 
@@ -155,8 +189,9 @@ def samsung_descriptions(link):
 
 
 @func_name
-def samsung_manage(full_product):
+def SamsungManage(full_product):
     full_product['manufacturer'] = '246'
     full_product['pickup_store'] = '1,5,6,12,13,14,15,16,17,18,19,20,23'
     full_product['descriptions'] = samsung_descriptions(full_product['link'])
-    full_product['imgs'] = product_imgs(full_product['link'], full_product['product_folder_name_in'], full_product['sku'])
+    full_product['imgs'] = product_imgs(full_product['link'], full_product['product_folder_name_in'],
+                                        full_product['sku'])

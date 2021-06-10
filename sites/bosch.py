@@ -10,7 +10,7 @@ from selenium import webdriver
 from selenium.common.exceptions import NoSuchElementException
 
 from globals import func_name
-from imgs_processing.save_images import save_images
+from imgs_processing.SaveImages import SaveImages
 
 
 def description(driver):
@@ -81,7 +81,7 @@ def product_imgs(driver, product_folder_name_in, ean):
     imgs_links = [img.get_attribute('srcset') for img in imgs_links]
     imgs_links = ['https:' + img.split(', ')[0] for img in imgs_links if '.jpg' in img]
 
-    imgs_names = save_images(imgs_links, product_folder_name_in, ean)
+    imgs_names = SaveImages(imgs_links, product_folder_name_in, ean)
 
     return imgs_names
 
@@ -100,7 +100,7 @@ def bosch_descriptions(link):
 
 
 @func_name
-def bosch_manage(full_product):
+def BoschManage(full_product):
     full_product['manufacturer'] = ''
     full_product['pickup_store'] = '1,2,3...'
     full_product['descriptions'], driver = bosch_descriptions(full_product['link'])

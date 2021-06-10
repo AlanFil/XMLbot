@@ -1,7 +1,7 @@
 import requests
 from scrapy import Selector
 
-from imgs_processing.save_images import save_images
+from imgs_processing.SaveImages import SaveImages
 
 
 def description(sel):
@@ -57,7 +57,7 @@ def product_imgs(link, product_folder_name_in, ean):
     for img in sel.xpath('//div[@id="sync1"]//a/@href').extract():
         imgs_links.append(img)
 
-    imgs_names = save_images(imgs_links, product_folder_name_in, ean)
+    imgs_names = SaveImages(imgs_links, product_folder_name_in, ean)
 
     return imgs_names
 
@@ -71,7 +71,7 @@ def sharp_descriptions(link):
     return [desc, short, tech]
 
 
-def sharp_manage(full_product):
+def SharpManage(full_product):
     full_product['manufacturer'] = '249'
     full_product['pickup_store'] = '1'
     full_product['descriptions'] = sharp_descriptions(full_product['link'])

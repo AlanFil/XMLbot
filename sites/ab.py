@@ -3,7 +3,7 @@ from selenium.common.exceptions import NoSuchElementException
 from selenium.webdriver.common.keys import Keys
 
 from globals import func_name
-from imgs_processing.save_images import save_images
+from imgs_processing.SaveImages import SaveImages
 
 
 def description(driver):
@@ -31,7 +31,7 @@ def product_imgs(driver, product_folder_name_in, ean):
     for img in imgs_links:
         img = 'https://cdn.ab.pl' + img if not img.startswith('https://cdn.ab.pl') else img
 
-    imgs_names = save_images(imgs_links, product_folder_name_in, ean)
+    imgs_names = SaveImages(imgs_links, product_folder_name_in, ean)
 
     return imgs_names
 
@@ -55,7 +55,7 @@ def ab_descriptions(sku):
 
 
 @func_name
-def ab_manage(full_product):
+def ABManage(full_product):
     full_product['manufacturer'] = '7173'
     full_product['pickup_store'] = '1'
     full_product['descriptions'], driver = ab_descriptions(full_product['sku'])

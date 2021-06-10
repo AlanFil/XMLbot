@@ -3,7 +3,7 @@ from scrapy import Selector
 from selenium import webdriver
 
 from globals import func_name
-from imgs_processing.save_images import save_images
+from imgs_processing.SaveImages import SaveImages
 
 
 def description(sel):
@@ -82,13 +82,13 @@ def philips_hue_descriptions(link):
 def product_imgs(imgs_links, product_folder_name_in, ean):
     imgs_links = [img for img in imgs_links]
 
-    imgs_names = save_images(imgs_links, product_folder_name_in, ean)
+    imgs_names = SaveImages(imgs_links, product_folder_name_in, ean)
 
     return imgs_names
 
 
 @func_name
-def philips_hue_manage(full_product):
+def PhilipsHueManage(full_product):
     full_product['manufacturer'] = '234'
     full_product['pickup_store'] = '1'
     full_product['descriptions'], imgs_links = philips_hue_descriptions(full_product['link'])

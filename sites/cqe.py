@@ -4,7 +4,7 @@ import requests
 from scrapy import Selector
 
 from globals import func_name
-from imgs_processing.save_images import save_images
+from imgs_processing.SaveImages import SaveImages
 
 
 def description(sel):
@@ -65,7 +65,7 @@ def product_imgs(link, product_folder_name_in, ean):
             continue
         imgs_links.append(img_sel.xpath('//img/@src').extract()[0])
 
-    imgs_names = save_images(imgs_links, product_folder_name_in, ean)
+    imgs_names = SaveImages(imgs_links, product_folder_name_in, ean)
 
     return imgs_names
 
@@ -80,7 +80,7 @@ def cqe_descriptions(link):
 
 
 @func_name
-def cqe_manage(full_product):
+def CQEManage(full_product):
     full_product['manufacturer'] = ''
     full_product['pickup_store'] = '1'
     full_product['descriptions'] = cqe_descriptions(full_product['link'])

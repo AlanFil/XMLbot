@@ -1,10 +1,10 @@
 
 from tqdm import tqdm
 
-from imgs_processing.ImgRefractor import prod_img
+from imgs_processing.ImgRefractor import ProdImg
 
 
-def save_images(imgs_links, product_folder_name_in, ean):
+def SaveImages(imgs_links, product_folder_name_in, ean):
     imgs_links = list(dict.fromkeys(imgs_links))  # remove duplicates
 
     imgs_names = []
@@ -17,10 +17,10 @@ def save_images(imgs_links, product_folder_name_in, ean):
             continue
 
         if i == 0:
-            file_type = prod_img(product_folder_name_in, imgs_links[i], f'{ean}-{i}-base', crop=False)
+            file_type = ProdImg(product_folder_name_in, imgs_links[i], f'{ean}-{i}-base', crop=False)
             imgs_names.append(f'{ean}-{i}-base.{file_type}')
         else:
-            file_type = prod_img(product_folder_name_in, imgs_links[i], f'{ean}-{i}', crop=False)
+            file_type = ProdImg(product_folder_name_in, imgs_links[i], f'{ean}-{i}', crop=False)
             imgs_names.append(f'{ean}-{i}.{file_type}')
 
     return imgs_names

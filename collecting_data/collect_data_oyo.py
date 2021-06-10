@@ -139,7 +139,7 @@ def set_supplier_ID(supplier):
 
 
 @timeit
-def collect_data_oyo(product):
+def CollectDataFromInput(product):
     """program rule and supplier ID given below"""
 
     full_product = {

@@ -7,7 +7,7 @@ from scrapy import Selector
 from tqdm import tqdm
 
 from globals import separate_by_tag, func_name
-from imgs_processing.save_images import save_images
+from imgs_processing.SaveImages import SaveImages
 
 
 def description(sel):
@@ -43,7 +43,7 @@ def product_imgs(link, product_folder_name_in, ean):
     imgs_links = sel.xpath('//*[@id="projector_form"]//ul[@class="bxslider"]//li//img/@src').extract()
     imgs_links = ['https://rcpro.pl' + img for img in imgs_links if not img.startswith('https://rcpro.pl')]
 
-    imgs_names = save_images(imgs_links, product_folder_name_in, ean)
+    imgs_names = SaveImages(imgs_links, product_folder_name_in, ean)
 
     return imgs_names
 
@@ -58,7 +58,7 @@ def dji_descriptions(link):
 
 
 @func_name
-def dji_manage(full_product):
+def DJIManage(full_product):
     full_product['manufacturer'] = '185'  # DJI
     full_product['pickup_store'] = '1'
     full_product['descriptions'] = dji_descriptions(full_product['link'])

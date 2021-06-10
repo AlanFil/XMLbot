@@ -10,7 +10,7 @@ import requests
 from PIL import Image, UnidentifiedImageError
 
 
-def desc_img(product_folder_name, img_link, img_name, border=800, crop=False, force_small=False):
+def DescImg(product_folder_name, img_link, img_name, border=800, crop=False, force_small=False):
     try:
         res = requests.get(img_link)
     except:
@@ -24,23 +24,31 @@ def desc_img(product_folder_name, img_link, img_name, border=800, crop=False, fo
                 return 0
 
     # verify file type
-    if 'jpg' in img_link[-5:].lower() or 'jpeg' in img_link[-5:].lower():
+    if 'svg' in img_link.lower():
+        file_type = 'svg'
+    elif 'jpg' in img_link[-5:].lower() or 'jpeg' in img_link[-5:].lower():
         file_type = 'jpg'
     elif 'png' in img_link[-5:].lower():
         file_type = 'png'
+    elif 'gif' in img_link[-5:].lower():
+        file_type = 'gif'
     else:
-        print('Rozszerzenie różne niż .jpg i .png. Przypisuję .jpg: ' + img_link)
+        print('Rozszerzenie różne niż .jpg, .png, .svg i .gif. Przypisuję .jpg: ' + img_link)
         file_type = 'jpg'
 
     IMAGE_PATH = f'bin/{product_folder_name}/description_imgs/{img_name}.{file_type}'
+
     # download an image
     with open(IMAGE_PATH, 'wb') as file_format:
         file_format.write(res.content)
 
+    if file_type == 'gif':
+        return file_type
+
     try:
         im = Image.open(IMAGE_PATH)
     except UnidentifiedImageError:
-        return 0
+        return file_type
 
     # crop empty area
     if crop:
@@ -70,7 +78,7 @@ def desc_img(product_folder_name, img_link, img_name, border=800, crop=False, fo
     return file_type
 
 
-def prod_img(product_folder_name, img_link, img_name, crop=False):
+def ProdImg(product_folder_name, img_link, img_name, crop=False):
     res = requests.get(img_link)
 
     # verify file type

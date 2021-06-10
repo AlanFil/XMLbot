@@ -2,7 +2,7 @@ import requests
 from scrapy import Selector
 
 from globals import func_name
-from imgs_processing.save_images import save_images
+from imgs_processing.SaveImages import SaveImages
 
 
 def description(sel):
@@ -70,7 +70,7 @@ def product_imgs(link, product_folder_name_in, ean):
         new_link = 'https://scentre.pl/' + img
         imgs_links.append(new_link)
 
-    imgs_names = save_images(imgs_links, product_folder_name_in, ean)
+    imgs_names = SaveImages(imgs_links, product_folder_name_in, ean)
 
     return imgs_names
 
@@ -86,7 +86,7 @@ def scentre_descriptions(link):
 
 
 @func_name
-def scentre_manage(full_product):
+def ScentreManage(full_product):
     full_product['manufacturer'] = '252'
     full_product['pickup_store'] = '1,2,3,4,7,8,9,10,11,21,25'
     full_product['descriptions'] = scentre_descriptions(full_product['link'])

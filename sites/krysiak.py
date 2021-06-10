@@ -2,7 +2,7 @@ import requests
 from scrapy import Selector
 
 from globals import separate_by_tag, func_name
-from imgs_processing.save_images import save_images
+from imgs_processing.SaveImages import SaveImages
 
 
 def description(sel):
@@ -45,7 +45,7 @@ def product_imgs(link, product_folder_name_in, ean):
     for img in sel.xpath('//div[contains(@id, "product")]//div[@class="images"]//a/@href').extract():
         imgs_links.append(img)
 
-    imgs_names = save_images(imgs_links, product_folder_name_in, ean)
+    imgs_names = SaveImages(imgs_links, product_folder_name_in, ean)
 
     return imgs_names
 
@@ -61,7 +61,7 @@ def krysiak_descriptions(link):
 
 
 @func_name
-def krysiak_manage(full_product):
+def KrysiakManage(full_product):
     full_product['manufacturer'] = '7156'
     full_product['pickup_store'] = '1'
     full_product['descriptions'] = krysiak_descriptions(full_product['link'])

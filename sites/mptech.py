@@ -5,7 +5,7 @@ from scrapy import Selector
 from selenium import webdriver
 
 from globals import func_name
-from imgs_processing.save_images import save_images
+from imgs_processing.SaveImages import SaveImages
 
 
 def rreplace(s, old, new, occurrence):
@@ -105,7 +105,7 @@ def product_imgs(link, product_folder_name_in, ean):
     links = [link.get_attribute('src') for link in links]
     driver.close()
 
-    imgs_names = save_images(links, product_folder_name_in, ean)
+    imgs_names = SaveImages(links, product_folder_name_in, ean)
 
     return imgs_names
 
@@ -121,7 +121,7 @@ def mptech_descriptions(link):
 
 
 @func_name
-def mptech_manage(full_product):
+def MptechManage(full_product):
     full_product['manufacturer'] = '286' if 'hammer' in full_product['name'].lower() else '285'
     full_product['pickup_store'] = '1'
     full_product['descriptions'] = mptech_descriptions(full_product['link'])

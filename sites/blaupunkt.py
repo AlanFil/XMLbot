@@ -4,7 +4,7 @@ import requests
 from scrapy import Selector
 
 from globals import func_name
-from imgs_processing.save_images import save_images
+from imgs_processing.SaveImages import SaveImages
 
 
 def description(sel):
@@ -62,7 +62,7 @@ def product_imgs(link, product_folder_name_in, ean):
     imgs_links = ['https://www.blaupunkt.com/' + img for img in
                   sel.xpath('//div[@id="product_gallery_new"]//img/@src').extract()]
 
-    imgs_names = save_images(imgs_links, product_folder_name_in, ean)
+    imgs_names = SaveImages(imgs_links, product_folder_name_in, ean)
 
     return imgs_names
 
@@ -77,7 +77,7 @@ def blaupunkt_descriptions(link):
 
 
 @func_name
-def blaupunkt_manage(full_product):
+def BlaupunktManage(full_product):
     full_product['manufacturer'] = '170'
     full_product['pickup_store'] = '1'
     full_product['descriptions'] = blaupunkt_descriptions(full_product['link'])
