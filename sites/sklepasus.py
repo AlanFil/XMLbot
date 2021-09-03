@@ -63,7 +63,7 @@ def sklepasus_descriptions(link):
     return [desc, short, tech]
 
 
-def SklepAsusManage(full_product):
+def sklep_asus_manage(full_product):
     full_product['manufacturer'] = '5878'
     full_product['pickup_store'] = '1'
     full_product['descriptions'] = sklepasus_descriptions(full_product['link'])

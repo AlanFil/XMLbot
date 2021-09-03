@@ -80,7 +80,7 @@ def LGDescriptions(link):
 
 
 @func_name
-def LGManage(full_product):
+def lg_manage(full_product):
     full_product['manufacturer'] = '211'
     full_product['pickup_store'] = '1'
     full_product['descriptions'] = LGDescriptions(full_product['link'])

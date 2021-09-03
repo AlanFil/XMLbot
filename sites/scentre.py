@@ -86,7 +86,7 @@ def scentre_descriptions(link):
 
 
 @func_name
-def ScentreManage(full_product):
+def scentre_manage(full_product):
     full_product['manufacturer'] = '252'
     full_product['pickup_store'] = '1,2,3,4,7,8,9,10,11,21,25'
     full_product['descriptions'] = scentre_descriptions(full_product['link'])

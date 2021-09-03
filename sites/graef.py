@@ -101,7 +101,7 @@ def graef_descriptions(link):
 
 
 @func_name
-def GraefManage(full_product):
+def graef_manage(full_product):
     full_product['manufacturer'] = '6745'
     full_product['pickup_store'] = '1'
     full_product['descriptions'] = graef_descriptions(full_product['link'])

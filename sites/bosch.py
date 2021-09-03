@@ -100,7 +100,7 @@ def bosch_descriptions(link):
 
 
 @func_name
-def BoschManage(full_product):
+def bosch_manage(full_product):
     full_product['manufacturer'] = ''
     full_product['pickup_store'] = '1,2,3...'
     full_product['descriptions'], driver = bosch_descriptions(full_product['link'])

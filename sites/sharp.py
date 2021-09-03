@@ -71,7 +71,7 @@ def sharp_descriptions(link):
     return [desc, short, tech]
 
 
-def SharpManage(full_product):
+def sharp_manage(full_product):
     full_product['manufacturer'] = '249'
     full_product['pickup_store'] = '1'
     full_product['descriptions'] = sharp_descriptions(full_product['link'])

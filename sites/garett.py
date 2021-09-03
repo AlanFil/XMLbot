@@ -113,7 +113,7 @@ def garett_descriptions(link):
 
 
 @func_name
-def GarettManage(full_product):
+def garett_manage(full_product):
     full_product['manufacturer'] = '196'
     full_product['pickup_store'] = '1'
     full_product['descriptions'] = garett_descriptions(full_product['link'])

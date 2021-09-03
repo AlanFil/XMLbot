@@ -41,12 +41,12 @@ def description(sel):
                 continue
 
         if 'class="swiper-wrapper"' in benefit[i]:
-            # should implement description element of slider here
+            # TODO: should implement description element of slider here
             benefit[i] = ''
             continue
 
         if 'feature-benefit-tab' in benefit[i]:
-
+            # TODO: should implement description here
             benefit[i] = ''
             continue
 
@@ -189,7 +189,7 @@ def samsung_descriptions(link):
 
 
 @func_name
-def SamsungManage(full_product):
+def samsung_manage(full_product):
     full_product['manufacturer'] = '246'
     full_product['pickup_store'] = '1,5,6,12,13,14,15,16,17,18,19,20,23'
     full_product['descriptions'] = samsung_descriptions(full_product['link'])

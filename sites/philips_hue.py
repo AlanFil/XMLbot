@@ -88,7 +88,7 @@ def product_imgs(imgs_links, product_folder_name_in, ean):
 
 
 @func_name
-def PhilipsHueManage(full_product):
+def philips_hue_manage(full_product):
     full_product['manufacturer'] = '234'
     full_product['pickup_store'] = '1'
     full_product['descriptions'], imgs_links = philips_hue_descriptions(full_product['link'])

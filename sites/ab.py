@@ -4,6 +4,7 @@ from selenium.webdriver.common.keys import Keys
 
 from globals import func_name
 from imgs_processing.SaveImages import SaveImages
+from secrets import AB_PASS, AB_LOGIN, AB_LINK
 
 
 def description(driver):
@@ -39,9 +40,9 @@ def product_imgs(driver, product_folder_name_in, ean):
 def ab_descriptions(sku):
     driver = webdriver.Chrome('resources/chromedriver.exe')
     driver.implicitly_wait(10)
-    driver.get('https://www.abonline.pl/default/pl/_/')
-    driver.find_element_by_name('login_login').send_keys('Milena')
-    driver.find_element_by_name('login_passwd').send_keys('UQCcUT')
+    driver.get(AB_LINK)
+    driver.find_element_by_name('login_login').send_keys(AB_LOGIN)
+    driver.find_element_by_name('login_passwd').send_keys(AB_PASS)
     driver.find_element_by_name('accept_cookie').click()
     driver.find_element_by_name('login_passwd').send_keys(Keys.ENTER)
 
@@ -55,7 +56,7 @@ def ab_descriptions(sku):
 
 
 @func_name
-def ABManage(full_product):
+def ab_manage(full_product):
     full_product['manufacturer'] = '7173'
     full_product['pickup_store'] = '1'
     full_product['descriptions'], driver = ab_descriptions(full_product['sku'])

@@ -77,7 +77,7 @@ def blaupunkt_descriptions(link):
 
 
 @func_name
-def BlaupunktManage(full_product):
+def blaupunkt_manage(full_product):
     full_product['manufacturer'] = '170'
     full_product['pickup_store'] = '1'
     full_product['descriptions'] = blaupunkt_descriptions(full_product['link'])

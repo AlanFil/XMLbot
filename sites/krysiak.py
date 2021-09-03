@@ -61,7 +61,7 @@ def krysiak_descriptions(link):
 
 
 @func_name
-def KrysiakManage(full_product):
+def krysiak_manage(full_product):
     full_product['manufacturer'] = '7156'
     full_product['pickup_store'] = '1'
     full_product['descriptions'] = krysiak_descriptions(full_product['link'])

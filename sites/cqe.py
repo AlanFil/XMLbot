@@ -80,9 +80,14 @@ def cqe_descriptions(link):
 
 
 @func_name
-def CQEManage(full_product):
+def cqe_manage(full_product):
     full_product['manufacturer'] = ''
     full_product['pickup_store'] = '1'
     full_product['descriptions'] = cqe_descriptions(full_product['link'])
     full_product['imgs'] = product_imgs(full_product['link'], full_product['product_folder_name_in'],
                                         full_product['sku'])
+
+    if "nintendo" in full_product['name'].lower():
+        full_product['manufacturer'] = '6055'
+        full_product['price_negotiation_hide'] = '1'
+

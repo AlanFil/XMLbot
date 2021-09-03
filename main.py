@@ -5,7 +5,7 @@ from FTP_connection.transfer import *
 from XML.CreateXML import CreateXML
 from XML.PreviewHTML import PreviewHTML
 from collecting_data.collect_data_from_sites import CollectDataFromSites
-from collecting_data.collect_data_oyo import CollectDataFromInput
+from collecting_data.collect_data_from_input import collect_data_from_input
 from imgs_processing.DownloadImgsAndReplaceLinks import DownloadImgsAndReplaceLinks
 
 
@@ -21,12 +21,12 @@ def PrintDescriptions(full_product):
 
 if __name__ == '__main__':
     """ HARD CODE ALERT """
-    products = """51993781	Etui HUAWEI do P40 Pro czarne	6901443366033	9999	HUAWEI	Matrix	""".split('\n')
+    products = """""".split('\n')
 
     send_via_FTP = True
-    print_descriptions = False
+    print_descriptions = True
     yes_to_all = True
-    download_desc_images = False
+    download_desc_images = True
     """ HARD CODE ALERT """
 
     # define an XML file to write products data inside
@@ -36,7 +36,7 @@ if __name__ == '__main__':
     marked = []
     for product in products:
         # (1) gather all necessary data On Your Own (OYO)
-        full_product = CollectDataFromInput(product.split('\t'))
+        full_product = collect_data_from_input(product.split('\t'))
         print(f"=============== {full_product['name']} ===============")
 
         # (2) gather all necessary data from given page(s)

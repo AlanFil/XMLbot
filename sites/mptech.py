@@ -121,7 +121,7 @@ def mptech_descriptions(link):
 
 
 @func_name
-def MptechManage(full_product):
+def mptech_manage(full_product):
     full_product['manufacturer'] = '286' if 'hammer' in full_product['name'].lower() else '285'
     full_product['pickup_store'] = '1'
     full_product['descriptions'] = mptech_descriptions(full_product['link'])

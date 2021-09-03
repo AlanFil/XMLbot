@@ -58,7 +58,7 @@ def dji_descriptions(link):
 
 
 @func_name
-def DJIManage(full_product):
+def dji_manage(full_product):
     full_product['manufacturer'] = '185'  # DJI
     full_product['pickup_store'] = '1'
     full_product['descriptions'] = dji_descriptions(full_product['link'])
