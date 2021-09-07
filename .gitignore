@@ -1,6 +1,6 @@
-/bin/
-/preview.html
-/sites/rtveuroagd.py
-/tests.py
+/src/bin/
+/src/sites/rtveuroagd.py
+/src/tests.py
+/src/secrets.py
 /ceneo_aktywne_oferty.py
-/secrets.py
+/preview.html
