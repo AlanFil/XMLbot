@@ -3,7 +3,7 @@ from selenium.common.exceptions import NoSuchElementException
 from selenium.webdriver.common.keys import Keys
 
 from src.globals import func_name
-from src.imgs_processing.SaveImages import SaveImages
+from src.imgs_processing.SaveImages import save_images
 from src.secrets import AB_LINK, AB_LOGIN, AB_PASS
 
 
@@ -32,7 +32,7 @@ def product_imgs(driver, product_folder_name_in, ean):
     for img in imgs_links:
         img = 'https://cdn.ab.pl' + img if not img.startswith('https://cdn.ab.pl') else img
 
-    imgs_names = SaveImages(imgs_links, product_folder_name_in, ean)
+    imgs_names = save_images(imgs_links, product_folder_name_in, ean)
 
     return imgs_names
 

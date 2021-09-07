@@ -78,7 +78,7 @@ def DescImg(product_folder_name, img_link, img_name, border=800, crop=False, for
     return file_type
 
 
-def ProdImg(product_folder_name, img_link, img_name, crop=False):
+def prod_img(product_folder_name, img_link, img_name, crop=False):
     res = requests.get(img_link)
 
     # verify file type
@@ -117,9 +117,17 @@ def ProdImg(product_folder_name, img_link, img_name, crop=False):
         new_height = round(height / ratio)
         im = im.resize((new_width, new_height))
 
+    result = Image.new(im.mode, (600, 600), (255, 255, 255))
+    width, height = im.size
+    paste_positions = (
+        (600 - width)//2,
+        (600 - height)//2
+    )
+    result.paste(im, paste_positions)
+
     # save changed image
     try:
-        im.save(IMAGE_PATH)
+        result.save(IMAGE_PATH)
     except OSError:
         print(f'WARNING: OSError. Could save a photo: {img_link}')
 

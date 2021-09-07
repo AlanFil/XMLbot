@@ -10,7 +10,7 @@ from selenium import webdriver
 from selenium.common.exceptions import NoSuchElementException
 
 from src.globals import func_name
-from src.imgs_processing.SaveImages import SaveImages
+from src.imgs_processing.SaveImages import save_images
 
 
 def description(driver):
@@ -81,7 +81,7 @@ def product_imgs(driver, product_folder_name_in, ean):
     imgs_links = [img.get_attribute('srcset') for img in imgs_links]
     imgs_links = ['https:' + img.split(', ')[0] for img in imgs_links if '.jpg' in img]
 
-    imgs_names = SaveImages(imgs_links, product_folder_name_in, ean)
+    imgs_names = save_images(imgs_links, product_folder_name_in, ean)
 
     return imgs_names
 

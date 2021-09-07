@@ -4,7 +4,7 @@ from time import gmtime, strftime
 from src.FTP_connection.transfer import *
 from src.XML.CreateXML import CreateXML
 from src.XML.PreviewHTML import PreviewHTML
-from src.collecting_data.CollectDataFromSites import collect_data_from_sites
+from src.collecting_data.collect_data_from_sites import collect_data_from_sites
 from src.collecting_data.collect_data_from_input import collect_data_from_input
 from src.imgs_processing.DownloadImgsAndReplaceLinks import DownloadImgsAndReplaceLinks
 

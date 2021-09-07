@@ -3,6 +3,7 @@ import os
 from src.globals import STARTING_DIRECTORY, timeit
 from src.sites.LG import lg_manage
 from src.sites.ab import ab_manage
+from src.sites.allegro import allegro_manage
 from src.sites.blaupunkt import blaupunkt_manage
 from src.sites.bosch import bosch_manage
 from src.sites.cqe import cqe_manage
@@ -19,7 +20,6 @@ from src.sites.scentre import scentre_manage
 from src.sites.sharp import sharp_manage
 from src.sites.sklepasus import sklep_asus_manage
 from src.sites.swiss import swiss_manage
-from src.sites.tenzi import tenzi_manage
 
 
 def create_product_folder(product_folder_name):
@@ -125,10 +125,10 @@ def collect_data_from_sites(full_product):
         create_product_folder(full_product['product_folder_name_in'])
         swiss_manage(full_product)
 
-    elif 'tenzi' in full_product['link'].lower():
-        full_product['product_folder_name_in'] = '4swiss' + full_product['product_folder_name_in']
+    elif 'allegro.' in full_product['link'].lower():
+        full_product['product_folder_name_in'] = 'Tenzi' + full_product['product_folder_name_in']
         create_product_folder(full_product['product_folder_name_in'])
-        tenzi_manage(full_product)
+        allegro_manage(full_product)
 
     else:
         print('WARNING: There was no scrapping function found')

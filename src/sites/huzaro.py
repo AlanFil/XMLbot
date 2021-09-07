@@ -10,7 +10,7 @@ import requests
 from scrapy import Selector
 
 from src.globals import func_name
-from src.imgs_processing.SaveImages import SaveImages
+from src.imgs_processing.SaveImages import save_images
 
 
 def Description(raw_desc):
@@ -73,7 +73,7 @@ def ProductImgs(link, product_folder_name_in, ean):
     imgs_links = [img for img in sel.xpath('//div[@class="innersmallgallery"]//a/@href').extract()]
     imgs_links = [huzaro_link + img for img in imgs_links if not img.startswith(huzaro_link)]
 
-    imgs_names = SaveImages(imgs_links, product_folder_name_in, ean)
+    imgs_names = save_images(imgs_links, product_folder_name_in, ean)
 
     return imgs_names
 

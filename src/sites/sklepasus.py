@@ -2,7 +2,7 @@ import requests
 from scrapy import Selector
 
 from src.globals import join_strip
-from src.imgs_processing.SaveImages import SaveImages
+from src.imgs_processing.SaveImages import save_images
 
 
 def description(sel):
@@ -48,7 +48,7 @@ def product_imgs(link, product_folder_name_in, ean):
     imgs_links = [img for img in sel.xpath('//div[contains(@id, "offerGallery")]//img[@class="m-offerGallery_picture"]/@data-zoom-image').extract()]
     imgs_links = ['https://sklepasus.pl' + img for img in imgs_links if not img.startswith('https://sklepasus.pl')]
 
-    imgs_names = SaveImages(imgs_links, product_folder_name_in, ean)
+    imgs_names = save_images(imgs_links, product_folder_name_in, ean)
 
     return imgs_names
 

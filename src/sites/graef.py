@@ -5,7 +5,7 @@ from scrapy import Selector
 from tqdm import tqdm
 
 from src.globals import func_name
-from src.imgs_processing.SaveImages import SaveImages
+from src.imgs_processing.SaveImages import save_images
 
 
 def description(sel):
@@ -86,7 +86,7 @@ def product_imgs(link, product_folder_name_in, ean):
         img = 'https://www.graef.pl' + img if not img.startswith('https://www.graef.pl') else img
         imgs_links.append(img)
 
-    imgs_names = SaveImages(imgs_links, product_folder_name_in, ean)
+    imgs_names = save_images(imgs_links, product_folder_name_in, ean)
 
     return imgs_names
 

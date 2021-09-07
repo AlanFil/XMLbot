@@ -5,7 +5,7 @@ from scrapy import Selector
 from selenium import webdriver
 
 from src.globals import func_name
-from src.imgs_processing.SaveImages import SaveImages
+from src.imgs_processing.SaveImages import save_images
 
 
 def rreplace(s, old, new, occurrence):
@@ -105,7 +105,7 @@ def product_imgs(link, product_folder_name_in, ean):
     links = [link.get_attribute('src') for link in links]
     driver.close()
 
-    imgs_names = SaveImages(links, product_folder_name_in, ean)
+    imgs_names = save_images(links, product_folder_name_in, ean)
 
     return imgs_names
 

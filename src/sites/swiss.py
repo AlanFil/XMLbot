@@ -9,7 +9,7 @@ import requests
 from scrapy import Selector
 
 from src.globals import func_name
-from src.imgs_processing.SaveImages import SaveImages
+from src.imgs_processing.SaveImages import save_images
 
 
 def Description(sel):
@@ -113,7 +113,7 @@ def ProductImgs(link, product_folder_name_in, ean):
     sel = Selector(text=requests.get(link).content)
     imgs_links = [img for img in sel.xpath('//figure[contains(@class, "product-gallery")]//a/@href').extract()]
 
-    imgs_names = SaveImages(imgs_links, product_folder_name_in, ean)
+    imgs_names = save_images(imgs_links, product_folder_name_in, ean)
 
     return imgs_names
 
