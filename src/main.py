@@ -23,10 +23,10 @@ if __name__ == '__main__':
     """ HARD CODE ALERT """
     products = """NSS230	Gra NINTENDO Switch Game Builder Garage NSS230	045496428945	9999	NINTENDO	Matrix	https://b2b.cqe.pl/switch-game-builder-garage/""".split('\n')
 
-    send_via_FTP = True
-    print_descriptions = True
-    yes_to_all = True
-    download_desc_images = True
+    send_via_FTP = False
+    print_descriptions = False
+    yes_to_all = False
+    download_desc_images = False
     """ HARD CODE ALERT """
 
     # define an XML file to write products data inside

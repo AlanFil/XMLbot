@@ -117,13 +117,19 @@ def prod_img(product_folder_name, img_link, img_name, crop=False):
         new_height = round(height / ratio)
         im = im.resize((new_width, new_height))
 
+    if height > 600:
+        ratio = height / 600
+        new_width = round(width / ratio)
+        new_height = round(height / ratio)
+        im = im.resize((new_width, new_height))
+
     result = Image.new(im.mode, (600, 600), (255, 255, 255))
     width, height = im.size
-    paste_positions = (
+    paste_position = (
         (600 - width)//2,
         (600 - height)//2
     )
-    result.paste(im, paste_positions)
+    result.paste(im, paste_position)
 
     # save changed image
     try:
