@@ -8,7 +8,7 @@ from src.imgs_processing.SaveImages import save_images
 
 
 def description(sel):
-    desc = ''.join(sel.xpath('//div[@id="popis"]//div[@class="desc"]/*').extract())
+    desc = ''.join(sel.xpath('//div[@class="desc"]/*').extract())
 
     for ele in re.findall(r'<p .*?>', desc):
         desc = desc.replace(ele, '<p>')
@@ -90,9 +90,3 @@ def cqe_manage(full_product):
     if "nintendo" in full_product['name'].lower():
         full_product['manufacturer'] = '6055'
         full_product['price_negotiation_hide'] = '1'
-
-
-    if "nintendo" in full_product['name'].lower():
-        full_product['manufacturer'] = '6055'
-        full_product['price_negotiation_hide'] = '1'
-

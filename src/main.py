@@ -21,12 +21,12 @@ def PrintDescriptions(full_product):
 
 if __name__ == '__main__':
     """ HARD CODE ALERT """
-    products = """WAD042B770AK010	TENZI DETAILER AUTO SZAMPON SUPER POŁYSK 770 ml	5900929411794	5,35	Tenzi	Matrix	https://allegro.pl/oferta/tenzi-detailer-auto-szampon-super-polysk-770-ml-10459638713?bi_s=ads&bi_m=listing%3Adesktop%3Aquery&bi_c=M2NmNWY3YWItOTdjNi00ZTZiLThkOTQtOTE3MTA4MGM5MDY5AA&bi_t=ape&referrer=proxy&emission_unit_id=49cba223-9172-45d7-bb55-1f769997a514""".split('\n')
+    products = """NSS230	Gra NINTENDO Switch Game Builder Garage NSS230	045496428945	9999	NINTENDO	Matrix	https://b2b.cqe.pl/switch-game-builder-garage/""".split('\n')
 
-    send_via_FTP = False
-    print_descriptions = False
-    yes_to_all = False
-    download_desc_images = False
+    send_via_FTP = True
+    print_descriptions = True
+    yes_to_all = True
+    download_desc_images = True
     """ HARD CODE ALERT """
 
     # define an XML file to write products data inside
@@ -66,7 +66,7 @@ if __name__ == '__main__':
         with open(f'bin\\{xml_file_name}', 'wb') as file:
             tree.write(file)
 
-        folders = [folder for folder in os.listdir('../bin') if
+        folders = [folder for folder in os.listdir('bin') if
                    not folder.endswith('.xml') and len(folder.split(' - ')) == 2]
 
         for folder in folders:
